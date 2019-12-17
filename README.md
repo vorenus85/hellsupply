@@ -11,7 +11,7 @@ $ npm run install
 # start MongoDB on port 31000
 $ docker-compose up
 
-# serve with hot reload at localhost:3000
+# serve with hot reload at localhost:8787
 $ npm run dev
 
 # build for production and launch server
