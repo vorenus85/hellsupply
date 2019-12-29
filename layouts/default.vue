@@ -42,6 +42,11 @@ export default {
           icon: 'mdi-home',
           title: 'Rendelés',
           to: '/'
+        },
+        {
+          icon: 'mdi-account-badge-horizontal',
+          title: 'Adminisztráció',
+          to: '/administration'
         }
       ],
       title: 'Hell Supply'
