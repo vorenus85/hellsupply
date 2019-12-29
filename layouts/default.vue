@@ -3,7 +3,6 @@
     v-navigation-drawer(
       permanent
       clipped
-      fixed
       app
       elevation="2")
       v-list

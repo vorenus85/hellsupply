@@ -13,21 +13,21 @@
 </template>
 
 <script>
-  export default {
-    layout: 'centered',
-    head: () => ({
-      title: 'Register'
-    }),
-    data: () => ({
-      valid: false,
-      lastname: '',
-      firstname: '',
-      email: '',
-      password: '',
-      emailRules: [
-        (v) => !!v || 'E-mail is required',
-        (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid'
-      ]
-    })
-  }
+export default {
+  layout: 'centered',
+  head: () => ({
+    title: 'Register'
+  }),
+  data: () => ({
+    valid: false,
+    lastname: '',
+    firstname: '',
+    email: '',
+    password: '',
+    emailRules: [
+      (v) => !!v || 'E-mail is required',
+      (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+    ]
+  })
+}
 </script>
