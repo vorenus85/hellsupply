@@ -2,6 +2,19 @@
 
 > Inhouse HELL ordering
 
+## Start Docker
+
+```
+docker-compose down
+docker-compose up -d
+```
+
+## Login with admin, admin into MongoDB
+```
+node login
+```
+
+
 ## Build Setup
 
 ``` bash
