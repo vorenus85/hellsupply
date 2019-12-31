@@ -39,14 +39,24 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 Manually generating password: `node generatePasswordHash.js`
 
-Example user (admin:admin)
+Example user with admin role (admin@admin.com:admin)
 ```
 {
     firstName: 'It's A',
     lastName: 'Admin',
-    username: 'admin',
+    email: 'admin@admin.com',
     password: '$2b$15$gHNKCQPydZ/R.ZH/nqOmm.zGalFn/UuYEV4tUkfsGHBpIgQx9tUyG',
     role: 'admin',
     active: true
 }
+```
+
+Add demo product:
+```nodejs
+node demoProducts
+```
+
+Add demo users:
+```nodejs
+node demoProducts
 ```
