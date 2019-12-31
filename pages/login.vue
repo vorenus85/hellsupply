@@ -5,8 +5,8 @@
       v-card-text
         v-progress-linear(v-if="loading" indeterminate color="yellow darken-2")
         .red--text(v-if="sent && error") Wrong username or password
-        .red--text(v-if="invalid") Username and password are required
-        v-text-field(v-model="username" label="Username" :rules="[v => !!v || 'Username is required']" type="text" required)
+        .red--text(v-if="invalid") Email and password are required
+        v-text-field(v-model="email" label="Email" :rules="[v => !!v || 'Email is required']" type="text" required)
         v-text-field(v-model="password" label="Password" :rules="[v => !!v || 'Password is required']" type="password" required)
       v-card-actions
         v-btn(text tile :to="{ name: 'register' }" nuxt x-small) You don't have an account yet?!
@@ -24,7 +24,7 @@ export default {
   }),
   data: () => ({
     valid: false,
-    username: null,
+    email: null,
     password: null,
     error: false,
     sent: false,
@@ -46,7 +46,7 @@ export default {
       this.loading = this.sent = true
       this.error = false
       const success = await this[coreNames.LOGIN]({
-        username: this.username,
+        email: this.email,
         password: this.password
       })
       if (success) this.$router.push({ name: 'index' })
