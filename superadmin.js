@@ -28,7 +28,7 @@ MongoClient.connect(
       users.insertOne({
         firstName: "It's A",
         lastName: 'Admin',
-        username: 'admin',
+        email: 'admin@admin.com',
         password:
           '$2b$15$gHNKCQPydZ/R.ZH/nqOmm.zGalFn/UuYEV4tUkfsGHBpIgQx9tUyG',
         role: 'admin',
