@@ -6,29 +6,28 @@
       v-tab-item
         v-container(class="pl-0 pr-0")
           v-col(class="pl-0 pr-0")
-            v-row(class="justify-center align-center no-gutters")
-              multiselect(v-model="defaultProduct",
-                :placeholder="defaultProduct.name",
-                label="title",
-                class="col col-md-6 mx-3",
-                track-by="title",
-                :options="products",
-                :option-height="50",
-                :show-labels="false"
-              )
-                template(slot="singleLabel", slot-scope="props")
-                  img.option__image(:src="props.option.img", :alt="props.option.name")
-                  span.option__desc
-                    span.option__title.mx-2 {{ props.option.name }}
-                    span.option__small {{ props.option.price }}
-                template(slot="option", slot-scope="props")
-                  img.option__image(:src="props.option.img", :alt="props.option.name")
-                  .option__desc
-                    span.option__title.mx-2 {{ props.option.name }}
-                    span.option__small {{ props.option.price }}
-              v-text-field(placeholder="Mennyiség (db)" type="number" class="col mx-3")
-              v-btn(color="primary" class="mx-3" fab)
-                v-icon(light) mdi-plus-circle-outline
+            v-form(ref="addProductToOrder")
+              v-row(class="justify-center align-center no-gutters")
+                multiselect(
+                  v-model="defaultProduct",
+                  class="col col-md-6 mx-3",
+                  :options="products",
+                  :option-height="30",
+                  :show-labels="false"
+                )
+                  template(slot="singleLabel", slot-scope="props")
+                    img.option__image(:src="props.option.img", :alt="props.option.name")
+                    span.option__desc
+                      span.option__title.mx-2 {{ props.option.name }}
+                      span.option__small {{ props.option.price }}
+                  template(slot="option", slot-scope="props")
+                    img.option__image(:src="props.option.img", :alt="props.option.name")
+                    .option__desc
+                      span.option__title.mx-2 {{ props.option.name }}
+                      span.option__small {{ props.option.price }}
+                v-text-field(placeholder="Mennyiség (db)" type="number" class="col mx-3" required)
+                v-btn(color="primary" class="mx-3" fab )
+                  v-icon(light) mdi-plus-circle-outline
       v-tab-item
         v-container
           v-col
@@ -62,9 +61,14 @@
 }
 </style>
 <script>
+import Multiselect from 'vue-multiselect'
+import Vue from 'vue'
+// register locally
+Vue.component('multiselect', Multiselect)
 export default {
   data: () => ({
     tab: null,
+    selectedProduct: null,
     defaultProduct: {
       id: 2,
       img:
@@ -85,6 +89,13 @@ export default {
       }
     ],
     products: [
+      {
+        id: 2,
+        img:
+          'https://fw.photos/QKelCjjirgnk6PS0P3g624XgAuM=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Fhell-ic-guava-yuzu-250-ed-5dc28951e9c63.png',
+        name: 'Ice Cool Guava-Yuzu',
+        price: 3520
+      },
       {
         id: 3,
         img:
@@ -107,6 +118,7 @@ export default {
         price: 3680
       }
     ]
-  })
+  }),
+  methods: {}
 }
 </script>

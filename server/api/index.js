@@ -43,6 +43,7 @@ MongoClient.connect(
     const db = client.db(MONGODB_DB)
     app.locals.mongo = db
     app.locals.users = db.collection('users')
+    app.locals.products = db.collection('products')
     app.locals.orders = db.collection('orders')
     consola.ready({
       message: `MongoDB connected`,
