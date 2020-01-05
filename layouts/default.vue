@@ -42,7 +42,7 @@ export default {
           items: [
             {
               title: 'Rendelés leadás',
-              to: '/orders/addNewOrder'
+              to: '/'
             },
             {
               title: 'Korábbi rendeléseim',

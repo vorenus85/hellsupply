@@ -1,47 +1,29 @@
 <template lang="pug">
-  v-layout(column justify-center align-center)
-    v-tabs(v-model="tab" grow)
-      v-tab(v-for="item in tabItems" :key="item") {{item}}
-    v-tabs-items(v-model="tab" class="container")
-      v-tab-item
-        v-container(class="pl-0 pr-0")
-          v-col(class="pl-0 pr-0")
-            v-form(ref="addProductToOrder")
-              v-row(class="justify-center align-center no-gutters")
-                multiselect(
-                  v-model="defaultProduct",
-                  class="col col-md-6 mx-3",
-                  :options="products",
-                  :option-height="30",
-                  :show-labels="false"
-                )
-                  template(slot="singleLabel", slot-scope="props")
-                    img.option__image(:src="props.option.img", :alt="props.option.name")
-                    span.option__desc
-                      span.option__title.mx-2 {{ props.option.name }}
-                      span.option__small {{ props.option.price }}
-                  template(slot="option", slot-scope="props")
-                    img.option__image(:src="props.option.img", :alt="props.option.name")
-                    .option__desc
-                      span.option__title.mx-2 {{ props.option.name }}
-                      span.option__small {{ props.option.price }}
-                v-text-field(placeholder="Mennyiség (db)" type="number" class="col mx-3" required)
-                v-btn(color="primary" class="mx-3" fab )
-                  v-icon(light) mdi-plus-circle-outline
-      v-tab-item
-        v-container
-          v-col
-            v-simple-table
-              thead
-                tr
-                  th(v-for="orderTitle in orderTable" :key="orderTitle") {{orderTitle}}
-              tbody
-                tr(v-for="order in orders" :key="order.datetime")
-                  td {{order.datetime}}
-                  td {{order.price}}
-                  td
-                    v-btn(color="primary" class="mx-2" outlined)
-                      v-icon mdi-square-edit-outline
+  div
+    v-subheader(class="base-title")
+      h1 {{pageTitle}}
+    v-form(ref="addProductToOrder" class="base-bg")
+      v-row(class="justify-center align-center no-gutters")
+        multiselect(
+          v-model="defaultProduct",
+          class="col col-md-6 mx-3",
+          :options="products",
+          :option-height="30",
+          :show-labels="false"
+        )
+          template(slot="singleLabel", slot-scope="props")
+            img.option__image(:src="props.option.img", :alt="props.option.name")
+            span.option__desc
+              span.option__title.mx-2 {{ props.option.name }}
+              span.option__small {{ props.option.price }}
+          template(slot="option", slot-scope="props")
+            img.option__image(:src="props.option.img", :alt="props.option.name")
+            .option__desc
+              span.option__title.mx-2 {{ props.option.name }}
+              span.option__small {{ props.option.price }}
+        v-text-field(placeholder="Mennyiség (db)" type="number" class="col mx-3" required)
+        v-btn(color="primary" class="mx-3" fab )
+          v-icon(light) mdi-plus-circle-outline
 </template>
 <style lang="scss">
 .option__image {
@@ -66,8 +48,11 @@ import Vue from 'vue'
 // register locally
 Vue.component('multiselect', Multiselect)
 export default {
+  head: () => ({
+    title: 'Termékek hozzáadása'
+  }),
   data: () => ({
-    tab: null,
+    pageTitle: 'Termékek hozzáadása',
     selectedProduct: null,
     defaultProduct: {
       id: 2,
@@ -105,20 +90,7 @@ export default {
         name: 'Zero',
         price: 3680
       }
-    ],
-    tabItems: ['Rendelés leadása', 'Korábbi rendeléseim'],
-    orderTable: ['Dátum', 'Összeg', 'Megnéz'],
-    orders: [
-      {
-        datetime: 1553885400,
-        price: 159
-      },
-      {
-        datetime: 1560365400,
-        price: 250
-      }
     ]
-  }),
-  methods: {}
+  })
 }
 </script>
