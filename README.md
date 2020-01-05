@@ -39,6 +39,11 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 Manually generating password: `node generatePasswordHash.js`
 
+Add superadmin user:
+```nodejs
+node superadmin
+```
+
 Example user with admin role (admin@admin.com:admin)
 ```
 {

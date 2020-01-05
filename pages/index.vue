@@ -76,18 +76,6 @@ export default {
       name: 'Ice Cool Guava-Yuzu',
       price: 3520
     },
-    tabItems: ['Rendelés leadása', 'Korábbi rendeléseim'],
-    orderTable: ['Dátum', 'Összeg', 'Megnéz'],
-    orders: [
-      {
-        datetime: 1553885400,
-        price: 159
-      },
-      {
-        datetime: 1560365400,
-        price: 250
-      }
-    ],
     products: [
       {
         id: 2,
@@ -116,6 +104,18 @@ export default {
           'https://fw.photos/tmTf-7ysT13dUGK2dTdgHr_sjNU=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Fbf34f881552fbc2bfee74519ab59793a-5cb5cb1a4024e.png',
         name: 'Zero',
         price: 3680
+      }
+    ],
+    tabItems: ['Rendelés leadása', 'Korábbi rendeléseim'],
+    orderTable: ['Dátum', 'Összeg', 'Megnéz'],
+    orders: [
+      {
+        datetime: 1553885400,
+        price: 159
+      },
+      {
+        datetime: 1560365400,
+        price: 250
       }
     ]
   }),
