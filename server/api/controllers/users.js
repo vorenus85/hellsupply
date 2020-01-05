@@ -15,4 +15,12 @@ router
     res.send(`UPDATE USER (${id}) WITH PARAMETERS: ${JSON.stringify(body)}`)
   )
 
+// TODO undefinedet ad vissza
+router.get('/administration/inactiveUsers', function({ app: { locals } }, res) {
+  const query = { active: false }
+  const users = locals.users
+  const inactUsers = users.find(query)
+  res.json(inactUsers)
+})
+
 module.exports = router

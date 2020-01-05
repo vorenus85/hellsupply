@@ -14,6 +14,7 @@
               v-icon mdi-check
             v-btn(color="red" class="mx-2" outlined title="Törlés")
               v-icon mdi-delete
+    div {{fromMongoInactiveUsers}}
 </template>
 <script>
 export default {
@@ -37,6 +38,13 @@ export default {
         id: 3
       }
     ]
-  })
+  }),
+  async asyncData({ req, res }) {
+    const returnRes = await res
+    console.log(returnRes)
+    return {
+      fromMongoInactiveUsers: returnRes
+    }
+  }
 }
 </script>
