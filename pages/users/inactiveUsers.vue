@@ -14,7 +14,7 @@
               v-icon mdi-check
             v-btn(color="red" class="mx-2" outlined title="Törlés")
               v-icon mdi-delete
-    div {{fromMongoInactiveUsers}}
+    div fromMongoInactiveUsers: {{fromMongoInactiveUsers}}
 </template>
 <script>
 export default {
@@ -24,6 +24,7 @@ export default {
   data: () => ({
     pageTitle: 'Inaktív regisztrálók',
     usersTable: ['E-mail cím', 'Műveletek'],
+    fromMongoInactiveUsers: null,
     inactiveUsers: [
       {
         email: 'asd@asd.hu',
@@ -41,7 +42,6 @@ export default {
   }),
   async asyncData({ req, res }) {
     const returnRes = await res
-    console.log(returnRes)
     return {
       fromMongoInactiveUsers: returnRes
     }

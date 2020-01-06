@@ -16,7 +16,7 @@ router
   )
 
 // TODO undefinedet ad vissza
-router.get('/administration/inactiveUsers', function({ app: { locals } }, res) {
+router.get('/inactiveUsers', function({ app: { locals } }, res) {
   const query = { active: false }
   const users = locals.users
   const inactUsers = users.find(query)

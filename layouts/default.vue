@@ -56,19 +56,19 @@ export default {
           items: [
             {
               title: 'Inaktív regisztrálók',
-              to: '/administration/inactiveUsers'
+              to: '/users/inactiveUsers'
             },
             {
               title: 'Aktív felhasználók',
-              to: '/administration/activeUsers'
+              to: '/users/activeUsers'
             },
             {
               title: 'Termékek hozzáadása',
-              to: '/administration/addNewProduct'
+              to: '/products/addNewProduct'
             },
             {
               title: 'Rendelési időszakok',
-              to: '/administration/orderPeriods'
+              to: '/orders/orderPeriods'
             }
           ]
         }
