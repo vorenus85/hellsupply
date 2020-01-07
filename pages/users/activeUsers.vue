@@ -9,6 +9,7 @@
       tbody
         tr(v-for="user in activeUsers" :key="user.id")
           td {{user.email}}
+          td {{user.lastName}} {{user.firstName}}
           td
             v-btn(color="warning" class="mx-2" outlined title="Inaktiválás")
               v-icon mdi-cancel
@@ -22,21 +23,14 @@ export default {
   }),
   data: () => ({
     pageTitle: 'Aktív felhasználók',
-    usersTable: ['E-mail cím', 'Műveletek'],
-    activeUsers: [
-      {
-        email: 'asd@asd.hu',
-        id: 1
-      },
-      {
-        email: 'hakapeszi@asd.com',
-        id: 2
-      },
-      {
-        email: 'hakapeszi@dfgdfg.com',
-        id: 3
-      }
-    ]
-  })
+    usersTable: ['E-mail cím', 'Név', 'Műveletek'],
+    activeUsers: null
+  }),
+  async asyncData({ $axios }) {
+    const { data: response } = await $axios.get('/users/activeUsers')
+    return {
+      activeUsers: response
+    }
+  }
 }
 </script>

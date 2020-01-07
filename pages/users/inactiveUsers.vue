@@ -9,12 +9,12 @@
       tbody
         tr(v-for="user in inactiveUsers" :key="user.id")
           td {{user.email}}
+          td {{user.lastName}} {{user.firstName}}
           td
             v-btn(color="green" class="mx-2" outlined title="Engedélyezés")
               v-icon mdi-check
             v-btn(color="red" class="mx-2" outlined title="Törlés")
               v-icon mdi-delete
-    div fromMongoInactiveUsers: {{fromMongoInactiveUsers}}
 </template>
 <script>
 export default {
@@ -23,27 +23,13 @@ export default {
   }),
   data: () => ({
     pageTitle: 'Inaktív regisztrálók',
-    usersTable: ['E-mail cím', 'Műveletek'],
-    fromMongoInactiveUsers: null,
-    inactiveUsers: [
-      {
-        email: 'asd@asd.hu',
-        id: 1
-      },
-      {
-        email: 'hakapeszi@asd.com',
-        id: 2
-      },
-      {
-        email: 'hakapeszi@dfgdfg.com',
-        id: 3
-      }
-    ]
+    usersTable: ['E-mail cím', 'Név', 'Műveletek'],
+    inactiveUsers: null
   }),
-  async asyncData({ req, res }) {
-    const returnRes = await res
+  async asyncData({ $axios }) {
+    const { data: response } = await $axios.get('/users/inactiveUsers')
     return {
-      fromMongoInactiveUsers: returnRes
+      inactiveUsers: response
     }
   }
 }
