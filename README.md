@@ -63,5 +63,5 @@ node demoProducts
 
 Add demo users:
 ```nodejs
-node demoProducts
+node demoUsers
 ```
