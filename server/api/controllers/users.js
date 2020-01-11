@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const router = Router({ mergeParams: true })
+const mongo = require('mongodb')
 
 router
   .route('/')
@@ -22,6 +23,20 @@ router.get('/activeUsers', async function({ app: { locals } }, res) {
   const users = locals.users
   const activeUsers = await users.find(query).toArray()
   res.json(activeUsers)
+})
+
+/* DELETE USER */
+router.delete('/deleteUser/:id', function(req, res, next) {
+  const id = req.params.id
+  console.log(id)
+  // eslint-disable-next-line no-undef
+  const collection = db.get().collection('users')
+  // eslint-disable-next-line handle-callback-err
+  collection.deleteOne({ _id: new mongo.ObjectId(id) }, function(
+    err,
+    results
+  ) {})
+  res.json({ success: id })
 })
 
 router

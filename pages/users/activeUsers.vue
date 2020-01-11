@@ -11,12 +11,13 @@
           td {{user.email}}
           td {{user.lastName}} {{user.firstName}}
           td
-            v-btn(color="warning" class="mx-2" outlined title="Inaktiválás")
+            v-btn(color="warning" class="mx-2" outlined title="Inaktiválás" @click="inactiveUser(user._id)")
               v-icon mdi-cancel
-            v-btn(color="red" class="mx-2" outlined title="Törlés")
+            v-btn(color="red" class="mx-2" outlined title="Törlés" @click="deleteUser(user._id)")
               v-icon mdi-delete
 </template>
 <script>
+import axios from 'axios'
 export default {
   head: () => ({
     title: 'Aktív felhasználók'
@@ -30,6 +31,28 @@ export default {
     const { data: response } = await $axios.get('/users/activeUsers')
     return {
       activeUsers: response
+    }
+  },
+  methods: {
+    inactiveUser(userId) {
+      console.log('inactiveUser: ' + userId)
+    },
+    deleteUser(userId) {
+      axios({
+        method: 'delete',
+        url: `/users/deleteUser/${userId}`,
+        data: null,
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then((result) => {
+          this.$router.push({
+            path: '/users/activeUsers'
+          })
+        })
+        .catch((e) => {
+          this.errors.push(e)
+        })
+      console.log('deleteUser: ' + userId)
     }
   }
 }
