@@ -25,6 +25,21 @@ router.get('/activeUsers', async function({ app: { locals } }, res) {
   res.json(activeUsers)
 })
 
+router.post('/post/:id', function(req, res, next) {
+  const id = req.params.id
+  res.json(id)
+})
+
+router.put('/put/:id', function(req, res, next) {
+  const id = req.params.id
+  res.json(id)
+})
+
+router.get('/get/:id', function(req, res, next) {
+  const id = req.params.id
+  res.json(id)
+})
+
 /* DELETE USER */
 router.delete('/deleteUser/:id', function(req, res, next) {
   const id = req.params.id
