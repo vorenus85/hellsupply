@@ -37,10 +37,10 @@ export default {
   },
   methods: {
     inactiveUser(userId) {
-      console.log('inactiveUser: ' + userId)
+
     },
     async deleteUser(userId) {
-      console.log('try deleteUser: ' + userId)
+
       try {
         await this.$axios.delete(`/users/${userId}`)
         this.activeUsers = this.activeUsers.filter(
