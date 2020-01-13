@@ -35,7 +35,7 @@ export default {
   methods: {
     async inactiveUser(userId) {
       try {
-        await this.$axios.put(`/users/doInactiveUser/${userId}`)
+        await this.$axios.put(`/users/modifyState/${userId}/false`)
         this.activeUsers = this.activeUsers.filter(
           (user) => user._id !== userId
         )

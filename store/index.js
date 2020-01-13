@@ -36,7 +36,6 @@ export const actions = {
       if (userData && userData.role === 'admin') {
         const { data: users } = await $axios.get('/users/all')
         commit(names.SET_USERS, users)
-        console.log('@@users', users)
       }
     }
     const value = result ? !!userData.id : false

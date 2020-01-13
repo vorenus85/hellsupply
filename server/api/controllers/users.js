@@ -10,34 +10,6 @@ router
 
 // test api: curl -i -H "Accept: application/json" localhost:8787/api/users/inactiveUsers
 
-router.get('/listInactiveUsers', async function({ app: { locals } }, res) {
-  const query = { active: false, role: 'user' }
-  const users = locals.users
-  const inactiveUsers = await users.find(query).toArray()
-  res.json(inactiveUsers)
-})
-
-router.get('/listActiveUsers', async function({ app: { locals } }, res) {
-  const query = { active: true, role: 'user' }
-  const users = locals.users
-  const activeUsers = await users.find(query).toArray()
-  res.json(activeUsers)
-})
-
-router.put('/doActiveUser/:id', async function({ app: { locals }, params: { id } }, res) {
-  const query = { active: true }
-  const users = locals.users
-  const doActiveUser = await users.updateOne({ _id: ObjectID(id) },  { $set:query })
-  res.json(doActiveUser)
-})
-
-router.put('/doInactiveUser/:id', async function({ app: { locals }, params: { id } }, res) {
-  const query = { active: false }
-  const users = locals.users
-  const doInactiveUser = await users.updateOne({ _id: ObjectID(id) }, { $set:query })
-  res.json(doInactiveUser)
-})
-
 router.get(
   '/all',
   async (
@@ -57,6 +29,38 @@ router.get(
     res.json(_res)
   }
 )
+
+router.get('/listInactiveUsers', async function({ app: { locals } }, res) {
+  const query = { active: false, role: 'user' }
+  const users = locals.users
+  const inactiveUsers = await users.find(query).toArray()
+  res.json(inactiveUsers)
+})
+
+router.get('/listActiveUsers', async function({ app: { locals } }, res) {
+  const query = { active: true, role: 'user' }
+  const users = locals.users
+  const activeUsers = await users.find(query).toArray()
+  res.json(activeUsers)
+})
+
+router
+  .route('/modifyState/:id/:userState')
+  .put(async function({ app: { locals }, params: { id, userState } }, res) {
+    console.dir(typeof userState)
+    console.dir(userState)
+    let query = { active: true }
+    if (userState === 'false') {
+      query = { active: false }
+    }
+    const users = locals.users
+    const modifyUserState = await users.updateOne(
+      { _id: ObjectID(id) },
+      { $set: query }
+    )
+    console.dir(id)
+    res.json(modifyUserState)
+  })
 
 router
   .route('/:id')
