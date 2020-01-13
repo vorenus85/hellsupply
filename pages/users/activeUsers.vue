@@ -32,6 +32,9 @@ export default {
       activeUsers: response
     }
   },
+  mounted() {
+    console.log('@@@users', this.$store.state.users)
+  },
   methods: {
     inactiveUser(userId) {
       console.log('inactiveUser: ' + userId)
@@ -39,8 +42,10 @@ export default {
     async deleteUser(userId) {
       console.log('try deleteUser: ' + userId)
       try {
-        await this.$axios.delete(`/users/deleteUser/${userId}`)
-        this.$router.push({ path: '/users/activeUsers' })
+        await this.$axios.delete(`/users/${userId}`)
+        this.activeUsers = this.activeUsers.filter(
+          (user) => user._id !== userId
+        )
       } catch (e) {
         this.errors.push(e)
         console.error(e)

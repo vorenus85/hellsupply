@@ -3,16 +3,21 @@ import { names as userNames } from './user'
 export const names = {
   SET_LOGIN_STATUS: 'setLoginStatus',
   LOGIN: 'login',
-  LOGOUT: 'logout'
+  LOGOUT: 'logout',
+  SET_USERS: 'setUsers'
 }
 
 export const state = () => ({
-  loggedIn: false
+  loggedIn: false,
+  users: null
 })
 
 export const mutations = {
   [names.SET_LOGIN_STATUS](state, value) {
     state.loggedIn = value
+  },
+  [names.SET_USERS](state, value) {
+    state.users = value
   }
 }
 
@@ -28,6 +33,11 @@ export const actions = {
     }
     if (result && result.success) {
       userData = result.userData
+      if (userData && userData.role === 'admin') {
+        const { data: users } = await $axios.get('/users/all')
+        commit(names.SET_USERS, users)
+        console.log('@@users', users)
+      }
     }
     const value = result ? !!userData.id : false
     commit(names.SET_LOGIN_STATUS, value)

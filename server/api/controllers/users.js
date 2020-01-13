@@ -1,7 +1,6 @@
 const { Router } = require('express')
 const router = Router({ mergeParams: true })
-const mongo = require('mongodb')
-
+const { ObjectID } = require('mongodb')
 router
   .route('/')
   .get((_, res) => res.send('LIST USERS'))
@@ -25,35 +24,38 @@ router.get('/activeUsers', async function({ app: { locals } }, res) {
   res.json(activeUsers)
 })
 
-router.post('/post/:id', function(req, res, next) {
-  const id = req.params.id
-  res.json(id)
+router.get('/all', async ({ app: { locals: { users }}}, res) => {
+  let _res = []
+  try {
+    _res = await users.find({}).toArray()
+  } catch (e) {
+    console.error(e)
+  }
+  res.json(_res)
 })
 
-router.put('/put/:id', function(req, res, next) {
-  const id = req.params.id
-  res.json(id)
-})
+router
+  .route('/:id')
+  .put( function(req, res, next) {
+    const id = req.params.id
+    res.json(id)
+  })
+  .get(function(req, res, next) {
+    const id = req.params.id
+    res.json(id)
+  })
+  .post(() => {})
+  .delete( function({ app: { locals: { users } }, params: { id } }, res, next) {
+    console.log(id)
+    // eslint-disable-next-line no-undef
+    users.deleteOne({ _id: ObjectID(id) }, function(
+      err,
+      results
+    ) {})
+    res.json({ success: id })
+  })
 
-router.get('/get/:id', function(req, res, next) {
-  const id = req.params.id
-  res.json(id)
-})
 
-/* DELETE USER */
-router.delete('/deleteUser/:id', function(req, res, next) {
-  const id = req.params.id
-  console.log(id)
-  // eslint-disable-next-line no-undef
-  const db = client.db(MONGODB_DB)
-  const collection = db.get().collection('users')
-  // eslint-disable-next-line handle-callback-err
-  collection.deleteOne({ _id: new mongo.ObjectId(id) }, function(
-    err,
-    results
-  ) {})
-  res.json({ success: id })
-})
 
 router
   .route('/:id')
