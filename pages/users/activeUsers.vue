@@ -27,20 +27,24 @@ export default {
     activeUsers: null
   }),
   async asyncData({ $axios }) {
-    const { data: response } = await $axios.get('/users/activeUsers')
+    const { data: response } = await $axios.get('/users/listActiveUsers')
     return {
       activeUsers: response
     }
   },
-  mounted() {
-    console.log('@@@users', this.$store.state.users)
-  },
   methods: {
-    inactiveUser(userId) {
-
+    async inactiveUser(userId) {
+      try {
+        await this.$axios.put(`/users/doInactiveUser/${userId}`)
+        this.activeUsers = this.activeUsers.filter(
+          (user) => user._id !== userId
+        )
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
     },
     async deleteUser(userId) {
-
       try {
         await this.$axios.delete(`/users/${userId}`)
         this.activeUsers = this.activeUsers.filter(
