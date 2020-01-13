@@ -17,7 +17,6 @@
               v-icon mdi-delete
 </template>
 <script>
-import axios from 'axios'
 export default {
   head: () => ({
     title: 'Aktív felhasználók'
@@ -37,22 +36,15 @@ export default {
     inactiveUser(userId) {
       console.log('inactiveUser: ' + userId)
     },
-    deleteUser(userId) {
-      axios({
-        method: 'delete',
-        url: `/users/deleteUser/${userId}`,
-        data: null,
-        headers: { 'Content-Type': 'application/json' }
-      })
-        .then((result) => {
-          this.$router.push({
-            path: '/users/activeUsers'
-          })
-        })
-        .catch((e) => {
-          this.errors.push(e)
-        })
-      console.log('deleteUser: ' + userId)
+    async deleteUser(userId) {
+      console.log('try deleteUser: ' + userId)
+      try {
+        await this.$axios.delete(`/users/deleteUser/${userId}`)
+        this.$router.push({ path: '/users/activeUsers' })
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
     }
   }
 }

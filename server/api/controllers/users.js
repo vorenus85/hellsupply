@@ -45,6 +45,7 @@ router.delete('/deleteUser/:id', function(req, res, next) {
   const id = req.params.id
   console.log(id)
   // eslint-disable-next-line no-undef
+  const db = client.db(MONGODB_DB)
   const collection = db.get().collection('users')
   // eslint-disable-next-line handle-callback-err
   collection.deleteOne({ _id: new mongo.ObjectId(id) }, function(
