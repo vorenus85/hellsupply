@@ -7,7 +7,7 @@
         tr
           th(v-for="usersTitle in usersTable" :key="usersTitle") {{usersTitle}}
       tbody
-        tr(v-for="user in inactiveUsers" :key="user.id")
+        tr(v-for="user in inactiveUsers" :key="user._id")
           td {{user.email}}
           td {{user.lastName}} {{user.firstName}}
           td

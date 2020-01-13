@@ -64,11 +64,11 @@ export default {
             },
             {
               title: 'Termékek hozzáadása',
-              to: '/products/addNewProduct'
+              to: '/products'
             },
             {
-              title: 'Rendelési időszakok',
-              to: '/orders/orderPeriods'
+              title: 'Rendelési időszak',
+              to: '/orders'
             }
           ]
         }
