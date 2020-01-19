@@ -15,12 +15,14 @@
             img.option__image(:src="props.option.image", :alt="props.option.name")
             span.option__desc
               span.option__title.mx-2 {{ props.option.name }}
-              span.option__small {{ props.option.price }}
+              span.option__small
+                v-chip(class="ma-2" small color="primary") {{ props.option.price | currency }}
           template(slot="option", slot-scope="props")
             img.option__image(:src="props.option.image", :alt="props.option.name")
             .option__desc
               span.option__title.mx-2 {{ props.option.name }}
-              span.option__small {{ props.option.price }}
+              span.option__small
+                v-chip(class="ma-2" small color="primary") {{ props.option.price | currency }}
         v-text-field(placeholder="Mennyiség (db)" type="number" class="col mx-3" required)
         v-btn(color="primary" class="mx-3" fab )
           v-icon(light) mdi-plus-circle-outline

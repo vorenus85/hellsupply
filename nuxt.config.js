@@ -34,7 +34,10 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [`~/plugins/vue-moment.js`],
+  plugins: [
+    `~/plugins/vue-moment.js`,
+    `~/plugins/vue-currency-filter.js`
+  ],
   /*
    ** Nuxt.js dev-modules
    */

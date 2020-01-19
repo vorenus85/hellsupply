@@ -47,6 +47,11 @@
           </v-dialog>
         </v-toolbar>
       </template>
+      <template v-slot:item.price="{ item }">
+        <v-chip class="ma-2" small color="primary">
+          {{ item.price | currency }}
+        </v-chip>
+      </template>
       <template v-slot:item.image="{ item }">
         <v-img :src="item.image" :alt="item.name" width="30px" />
       </template>

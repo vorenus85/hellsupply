@@ -9,7 +9,8 @@
       tbody
         tr(v-for="order in orders" :key="order.datetime")
           td {{order.datetime | moment("YYYY. MM. Do") }}
-          td {{order.price}}
+          td
+            v-chip(class="ma-2" small color="primary") {{order.price | currency }}
           td
             v-btn(color="primary" class="mx-2" outlined title="Megnéz")
               v-icon mdi-square-edit-outline

@@ -3,7 +3,7 @@ const router = Router({ mergeParams: true })
 const { ObjectID } = require('mongodb')
 
 router.get('/activeProducts', async function({ app: { locals } }, res) {
-  const query = { active: 1 }
+  const query = { active: true }
   const products = locals.products
   const activeProducts = await products.find(query).toArray()
   res.json(activeProducts)
@@ -25,6 +25,9 @@ router
   .get(function(req, res, next) {
     const id = req.params.id
     res.json(id)
+  })
+  .post(async function({ app: { locals }, params: { id }, body }, res) {
+
   })
   .put(async function({ app: { locals }, params: { id }, body }, res) {
     const query = body

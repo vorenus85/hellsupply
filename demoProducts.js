@@ -30,7 +30,7 @@ MongoClient.connect(
           id: 1,
           name: 'Ice Cool Guava-Yuzu',
           price: '4776',
-          active: 1,
+          active: true,
           image:
             'https://fw.photos/QKelCjjirgnk6PS0P3g624XgAuM=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Fhell-ic-guava-yuzu-250-ed-5dc28951e9c63.png'
         },
@@ -38,7 +38,7 @@ MongoClient.connect(
           id: 2,
           name: 'Ice Cool Cherry-Grape',
           price: '4776',
-          active: 1,
+          active: true,
           image:
             'https://fw.photos/Ed9a2KlIXrMH1fuAHo76gJF-hJE=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Fhell-ic-cherry-grape-250-ed-5dc288853bb62.png'
         },
@@ -46,7 +46,7 @@ MongoClient.connect(
           id: 3,
           name: 'Classic',
           price: '4776',
-          active: 1,
+          active: true,
           image:
             'https://fw.photos/qQahGtSn2pUX-4tjOURbQw6bkC8=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Fhell-classic-250-ed-02-5cb7358da4c00.png'
         },
@@ -54,7 +54,7 @@ MongoClient.connect(
           id: 4,
           name: 'Strong Apple',
           price: '4776',
-          active: 1,
+          active: true,
           image:
             'https://fw.photos/8fQppCPmIK_U2VFU6mTie7UkVl8=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Fhell-strong-apple-250-ed-02-5cd4371c7b282-5cdbe4fdd6644.png'
         },
@@ -62,7 +62,7 @@ MongoClient.connect(
           id: 5,
           name: 'Strong Red Grape',
           price: '4776',
-          active: 1,
+          active: true,
           image:
             'https://fw.photos/ULVVi34djlvY2AXvdr1pW_yGfi4=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Fhell-strong-redgrape-250-ed-02-5cd4372f3538c-5cdbe4c5b8012.png'
         },
@@ -70,7 +70,7 @@ MongoClient.connect(
           id: 6,
           name: 'Zero',
           price: '4776',
-          active: 1,
+          active: true,
           image:
             'https://fw.photos/tmTf-7ysT13dUGK2dTdgHr_sjNU=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Fbf34f881552fbc2bfee74519ab59793a-5cb5cb1a4024e.png'
         },
@@ -78,7 +78,7 @@ MongoClient.connect(
           id: 7,
           name: 'Zero Strawberry',
           price: '4776',
-          active: 1,
+          active: true,
           image:
             'https://fw.photos/8UNUVGAbf9hFYGcjVdHDjF-b_mI=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Ff4dee4ef380973c6fb43cceedf1c7858-5cb5caff79923.png'
         },
@@ -86,7 +86,7 @@ MongoClient.connect(
           id: 8,
           name: 'Strong Focus',
           price: '4776',
-          active: 0,
+          active: false,
           image:
             'https://fw.photos/Ig9psDzXUIHzh9HfEJIJSf4eH24=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Fhell-strong-focus-250-ed-02-1-5cb737e12873f.png'
         }

@@ -63,7 +63,7 @@ export default {
               to: '/users/activeUsers'
             },
             {
-              title: 'Termékek hozzáadása',
+              title: 'Termékek',
               to: '/products'
             },
             {
