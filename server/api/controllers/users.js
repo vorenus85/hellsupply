@@ -45,28 +45,20 @@ router.get('/listActiveUsers', async function({ app: { locals } }, res) {
 })
 
 router
-  .route('/modifyState/:id/:userState')
-  .put(async function({ app: { locals }, params: { id, userState } }, res) {
-    console.dir(typeof userState)
-    console.dir(userState)
-    let query = { active: true }
-    if (userState === 'false') {
-      query = { active: false }
-    }
-    const users = locals.users
-    const modifyUserState = await users.updateOne(
-      { _id: ObjectID(id) },
-      { $set: query }
-    )
-    console.dir(id)
-    res.json(modifyUserState)
-  })
-
-router
   .route('/:id')
   .get(function(req, res, next) {
     const id = req.params.id
     res.json(id)
+  })
+  .put(async function({ app: { locals }, params: { id }, body }, res) {
+    const query = body
+    const users = locals.users
+    const modifyUser = await users.updateOne(
+      { _id: ObjectID(id) },
+      { $set: query }
+    )
+    console.dir(id)
+    res.json(modifyUser)
   })
   .post(() => {})
   .delete(function(
