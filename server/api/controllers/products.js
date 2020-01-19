@@ -26,6 +26,15 @@ router
     const id = req.params.id
     res.json(id)
   })
+  .put(async function({ app: { locals }, params: { id }, body }, res) {
+    const query = body
+    const products = locals.products
+    const modifyProduct = await products.updateOne(
+      { _id: ObjectID(id) },
+      { $set: query }
+    )
+    res.json(modifyProduct)
+  })
   .delete(function(
     {
       app: {
