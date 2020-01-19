@@ -9,25 +9,37 @@ router.get('/activeProducts', async function({ app: { locals } }, res) {
   res.json(activeProducts)
 })
 
-router.get('/', async function({ app: { locals } }, res) {
+router.get('/defaultProduct', async function({ app: { locals } }, res) {
+  const query = { name: 'Classic' }
   const products = locals.products
-  let allProducts = []
-  try {
-    allProducts = await products.find({}).toArray()
-  } catch (e) {
-    console.error(e)
-  }
-  res.json(allProducts)
+  const defaultProduct = await products.find(query).toArray()
+  res.json(defaultProduct)
 })
+
+router
+  .route('/')
+  .get(async function({ app: { locals } }, res) {
+    const products = locals.products
+    let allProducts = []
+    try {
+      allProducts = await products.find({}).toArray()
+    } catch (e) {
+      console.error(e)
+    }
+    res.json(allProducts)
+  })
+  .post(async function({ app: { locals }, body }, res) {
+    const query = body
+    const products = locals.products
+    const insertProduct = await products.insertOne(query)
+    res.json(insertProduct)
+  })
 
 router
   .route('/:id')
   .get(function(req, res, next) {
     const id = req.params.id
     res.json(id)
-  })
-  .post(async function({ app: { locals }, params: { id }, body }, res) {
-
   })
   .put(async function({ app: { locals }, params: { id }, body }, res) {
     const query = body

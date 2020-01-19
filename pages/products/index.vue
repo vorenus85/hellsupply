@@ -28,7 +28,7 @@
                     <v-col cols="12" sm="12" md="12">
                       <v-text-field v-model="editedItem.image" label="Kép" />
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="12" sm="12" md="12">
                       <v-text-field v-model="editedItem.name" label="Név" />
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
@@ -66,7 +66,7 @@
           <v-btn @click="editItem(item)" outlined class="mr-2" color="primary">
             <v-icon>mdi-square-edit-outline</v-icon>
           </v-btn>
-          <v-btn @click="deleteItem(item._id)" outlined color="red">
+          <v-btn @click="deleteItem(item)" outlined color="red">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </v-row>
@@ -96,12 +96,12 @@ export default {
     editedIndex: -1,
     editedItem: {
       image: '',
-      name: 0,
+      name: '',
       price: 0
     },
     defaultItem: {
       image: '',
-      name: 0,
+      name: '',
       price: 0
     }
   }),
@@ -136,7 +136,8 @@ export default {
         console.error(e)
       }
     },
-    async deleteItem(productId) {
+    async deleteItem(item) {
+      const productId = item._id
       try {
         await this.$axios.delete(`/products/${productId}`)
         this.products = this.products.filter(
@@ -154,11 +155,11 @@ export default {
         this.editedIndex = -1
       }, 300)
     },
-    modifyItemState(product) {
-      const productId = product._id
+    modifyItemState(item) {
+      const productId = item._id
       try {
         this.$axios.put(`/products/${productId}`, {
-          active: product.active
+          active: item.active
         })
       } catch (e) {
         this.errors.push(e)
@@ -167,21 +168,34 @@ export default {
     },
     save() {
       if (this.editedIndex > -1) {
+        console.log('edit')
         Object.assign(this.products[this.editedIndex], this.editedItem)
+        const productId = this.editedItem._id
+        try {
+          this.$axios.put(`/products/${productId}`, {
+            name: this.editedItem.name,
+            price: this.editedItem.price,
+            image: this.editedItem.image,
+            active: this.editedItem.active
+          })
+        } catch (e) {
+          this.errors.push(e)
+          console.error(e)
+        }
       } else {
-        this.products.push(this.editedItem)
-      }
-      const productId = this.editedItem._id
-      try {
-        this.$axios.put(`/products/${productId}`, {
-          name: this.editedItem.name,
-          price: this.editedItem.price,
-          image: this.editedItem.image,
-          active: this.editedItem.active
-        })
-      } catch (e) {
-        this.errors.push(e)
-        console.error(e)
+        console.log('add')
+        try {
+          this.$axios.post(`/products/`, {
+            name: this.editedItem.name,
+            price: this.editedItem.price,
+            image: this.editedItem.image,
+            active: false
+          })
+        } catch (e) {
+          this.errors.push(e)
+          console.error(e)
+        }
+        this.listItems()
       }
       this.close()
     }

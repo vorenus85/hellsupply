@@ -56,19 +56,15 @@ export default {
   data: () => ({
     pageTitle: 'Termékek hozzáadása',
     selectedProduct: null,
-    defaultProduct: {
-      id: 2,
-      image:
-        'https://fw.photos/QKelCjjirgnk6PS0P3g624XgAuM=/fit-in/450x296/https%3A%2F%2Fwww.hellenergystore.com%2Fuploads%2Ffiles%2Fhell-ic-guava-yuzu-250-ed-5dc28951e9c63.png',
-      name: 'Ice Cool Guava-Yuzu',
-      price: 3520
-    },
+    defaultProduct: null,
     activeProducts: null
   }),
   async asyncData({ $axios }) {
-    const { data: response } = await $axios.get('/products/activeProducts')
+    const activeProductsResponse = await $axios.get('/products/activeProducts')
+    const defaultProductResponse = await $axios.get('/products/defaultProduct')
     return {
-      activeProducts: response
+      activeProducts: activeProductsResponse.data,
+      defaultProduct: defaultProductResponse.data
     }
   }
 }
