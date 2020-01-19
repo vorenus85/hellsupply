@@ -56,12 +56,20 @@
         <v-img :src="item.image" :alt="item.name" width="30px" />
       </template>
       <template v-slot:item.action="{ item }">
-        <v-btn @click="editItem(item)" outlined class="mr-2" color="primary">
-          <v-icon>mdi-square-edit-outline</v-icon>
-        </v-btn>
-        <v-btn @click="deleteItem(item._id)" outlined color="red">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
+        <v-row class="align-center">
+          <v-switch
+            v-model="item.active"
+            @change="modifyItemState(item)"
+            color="success"
+            inset
+          />
+          <v-btn @click="editItem(item)" outlined class="mr-2" color="primary">
+            <v-icon>mdi-square-edit-outline</v-icon>
+          </v-btn>
+          <v-btn @click="deleteItem(item._id)" outlined color="red">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </v-row>
       </template>
     </v-data-table>
   </div>
@@ -146,7 +154,17 @@ export default {
         this.editedIndex = -1
       }, 300)
     },
-
+    modifyItemState(product) {
+      const productId = product._id
+      try {
+        this.$axios.put(`/products/${productId}`, {
+          active: product.active
+        })
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+    },
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.products[this.editedIndex], this.editedItem)
