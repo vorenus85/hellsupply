@@ -8,7 +8,7 @@
           th(v-for="orderTitle in orderTable" :key="orderTitle") {{orderTitle}}
       tbody
         tr(v-for="order in orders" :key="order.datetime")
-          td {{order.datetime}}
+          td {{order.datetime | moment("YYYY. MM. Do") }}
           td {{order.price}}
           td
             v-btn(color="primary" class="mx-2" outlined title="Megnéz")
