@@ -9,7 +9,7 @@
       tbody
         tr(v-for="user in activeUsers" :key="user._id")
           td {{user.email}}
-          td {{user.lastName}} {{user.firstName}}
+          td {{user.name}}
           td
             v-btn(color="warning" class="mx-2" outlined title="Inaktiválás" @click="inactiveUser(user._id)")
               v-icon mdi-cancel

@@ -9,7 +9,7 @@
       tbody
         tr(v-for="user in inactiveUsers" :key="user._id")
           td {{user.email}}
-          td {{user.lastName}} {{user.firstName}}
+          td {{user.name}}
           td
             v-btn(color="green" class="mx-2" outlined title="Engedélyezés" @click="activeUser(user._id)")
               v-icon mdi-check

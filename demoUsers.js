@@ -28,8 +28,7 @@ MongoClient.connect(
       users.insertMany([
         {
           id: 1,
-          firstName: 'Some',
-          lastName: 'User',
+          name: 'Some User',
           email: 'someuser@hellsupply.com',
           password:
             '$2b$15$gHNKCQPydZ/R.ZH/nqOmm.zGalFn/UuYEV4tUkfsGHBpIgQx9tUyG',
@@ -38,8 +37,7 @@ MongoClient.connect(
         },
         {
           id: 2,
-          firstName: 'Somesome',
-          lastName: 'User',
+          name: 'Somesome User',
           email: 'someuser33@hellsupply.com',
           password:
             '$2b$15$gHNKCQPydZ/R.ZH/nqOmm.zGalFn/UuYEV4tUkfsGHBpIgQx9tUyG',
@@ -48,8 +46,7 @@ MongoClient.connect(
         },
         {
           id: 3,
-          firstName: 'Another',
-          lastName: 'User',
+          name: 'Another User',
           email: 'anotheruser@hellsupply.com',
           password:
             '$2b$15$gHNKCQPydZ/R.ZH/nqOmm.zGalFn/UuYEV4tUkfsGHBpIgQx9tUyG',
@@ -58,8 +55,7 @@ MongoClient.connect(
         },
         {
           id: 4,
-          firstName: 'Demo',
-          lastName: 'User',
+          name: 'Demo User',
           email: 'demouser@hellsupply.com',
           password:
             '$2b$15$gHNKCQPydZ/R.ZH/nqOmm.zGalFn/UuYEV4tUkfsGHBpIgQx9tUyG',
@@ -68,8 +64,7 @@ MongoClient.connect(
         },
         {
           id: 5,
-          firstName: 'Nobody',
-          lastName: 'User',
+          name: 'Nobody User',
           email: 'nobodyuser@hellsupply.com',
           password:
             '$2b$15$gHNKCQPydZ/R.ZH/nqOmm.zGalFn/UuYEV4tUkfsGHBpIgQx9tUyG',

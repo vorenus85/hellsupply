@@ -26,8 +26,7 @@ MongoClient.connect(
     pino.info('Inserting example user (admin:admin)')
     try {
       users.insertOne({
-        firstName: "It's A",
-        lastName: 'Admin',
+        name: "It's A Admin",
         email: 'admin@admin.com',
         password:
           '$2b$15$gHNKCQPydZ/R.ZH/nqOmm.zGalFn/UuYEV4tUkfsGHBpIgQx9tUyG',

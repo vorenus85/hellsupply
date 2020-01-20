@@ -9,7 +9,7 @@ router.get('/activeProducts', async function({ app: { locals } }, res) {
   res.json(activeProducts)
 })
 
-router.get('/defaultProduct', async function({ app: { locals } }, res) {
+router.get('/selectedProduct', async function({ app: { locals } }, res) {
   const query = { name: 'Classic' }
   const products = locals.products
   const defaultProduct = await products.find(query).toArray()

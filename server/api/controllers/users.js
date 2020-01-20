@@ -4,9 +4,9 @@ const { ObjectID } = require('mongodb')
 router
   .route('/')
   .get((_, res) => res.send('LIST USERS'))
-  .post(({ body }, res) =>
-    res.send(`CREATE USER WITH PARAMETERS: ${JSON.stringify(body)}`)
-  )
+  .post(async function({ app: { locals }, params: { id }, body }, res) {
+
+  })
 
 // test api: curl -i -H "Accept: application/json" localhost:8787/api/users/inactiveUsers
 
