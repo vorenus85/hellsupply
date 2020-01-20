@@ -5,7 +5,10 @@ router
   .route('/')
   .get((_, res) => res.send('LIST USERS'))
   .post(async function({ app: { locals }, params: { id }, body }, res) {
-
+    const query = body
+    const users = locals.users
+    const insertUsers = await users.insertOne(query)
+    res.json(insertUsers)
   })
 
 // test api: curl -i -H "Accept: application/json" localhost:8787/api/users/inactiveUsers

@@ -46,8 +46,7 @@ export default {
     async register() {
       try {
         await this.$axios.post(`/users/`, {
-          firstname: this.lastname,
-          lastname: this.lastname,
+          name: this.name,
           email: this.email,
           password: this.password,
           role: 'user',
@@ -63,16 +62,12 @@ export default {
       if (!this.valid) return
       const valid = this.validate()
       if (!valid) return
-      this.loading = this.sent = true
-      this.error = false
       this.register()
       const success = await this[coreNames.LOGIN]({
         email: this.email,
         password: this.password
       })
       if (success) this.$router.push({ name: 'index' })
-      this.error = !success
-      this.loading = false
     }
   }
 }
