@@ -6,12 +6,13 @@
       div(class="col-md-3")
       div(class="col-md-6")
         v-card(tile)
+          v-card-title Kosár
           v-simple-table
             thead
               tr
                 th Kép
                 th Név
-                th Tálca
+                th Mennyiség
                 th Részösszeg
                 th
             tbody
@@ -25,13 +26,13 @@
                   v-btn(color="red" class="mx-2" small outlined title="Törlés" @click="deleteFromCart(index)")
                     v-icon mdi-delete
               tr
-                td
-                td
+                td(colspan="2")
                 td
                   strong Végösszeg:
                 td
                   strong  {{ orderTotal | currency }}
                 td
+                  v-btn(color="success" class="mx-2" @click="submitOrder") Megrendel
       div(class="col-md-3")
     div(class="row")
       div(class="col-md-2")
@@ -124,6 +125,20 @@ export default {
   methods: {
     deleteFromCart(index) {
       this.orders.splice(index, 1)
+    },
+    submitOrder() {
+      const orderTimestamp = new Date().getTime()
+      try {
+        this.$axios.post(`/orders/`, {
+          orders: this.orders,
+          user: this.$store.state.user,
+          timestamp: orderTimestamp
+        })
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+      this.orders = []
     },
     async addToCart(e) {
       e.preventDefault()

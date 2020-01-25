@@ -6,18 +6,16 @@ export const names = {
 
 export const state = () => ({
   id: null,
-  firstName: null,
-  lastName: null,
-  username: null,
+  name: null,
+  email: null,
   role: null
 })
 
 export const mutations = {
-  [names.SET_USER](state, { id, firstName, lastName, username, role }) {
+  [names.SET_USER](state, { id, name, email, role }) {
     state.id = id
-    state.firstName = firstName
-    state.lastName = lastName
-    state.username = username
+    state.name = name
+    state.email = email
     state.role = role
   }
 }
@@ -27,9 +25,8 @@ export const actions = {
     const { data: result } = await this.$axios.post('/auth/login', data)
     let userData = {
       id: null,
-      firstName: null,
-      lastName: null,
-      username: null,
+      name: null,
+      email: null,
       role: null
     }
     if (result && result.success) {
@@ -43,8 +40,8 @@ export const actions = {
     if (result) {
       commit(names.SET_USER, {
         id: null,
-        firstName: null,
-        lastName: null,
+        name: null,
+        email: null,
         role: null
       })
       return true
