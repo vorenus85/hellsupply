@@ -32,6 +32,7 @@
 import { mapState, mapActions } from 'vuex'
 import { names } from '@/store'
 export default {
+  // TODO arminRole
   data() {
     return {
       items: [
