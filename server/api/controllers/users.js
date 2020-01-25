@@ -63,25 +63,33 @@ router.get(
     let _res = []
     try {
       _res = await users.find({}).toArray()
+      res.json(_res)
     } catch (e) {
       console.error(e)
     }
-    res.json(_res)
   }
 )
 
 router.get('/listInactiveUsers', async function({ app: { locals } }, res) {
   const query = { active: false, role: 'user' }
   const users = locals.users
-  const inactiveUsers = await users.find(query).toArray()
-  res.json(inactiveUsers)
+  try {
+    const inactiveUsers = await users.find(query).toArray()
+    res.json(inactiveUsers)
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 router.get('/listActiveUsers', async function({ app: { locals } }, res) {
   const query = { active: true, role: 'user' }
   const users = locals.users
-  const activeUsers = await users.find(query).toArray()
-  res.json(activeUsers)
+  try {
+    const activeUsers = await users.find(query).toArray()
+    res.json(activeUsers)
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 router
@@ -93,28 +101,34 @@ router
   .put(async function({ app: { locals }, params: { id }, body }, res) {
     const query = body
     const users = locals.users
-    const modifyUser = await users.updateOne(
-      { _id: ObjectID(id) },
-      { $set: query }
-    )
-    console.dir(id)
-    res.json(modifyUser)
+    try {
+      const modifyUser = await users.updateOne(
+        { _id: ObjectID(id) },
+        { $set: query }
+      )
+      res.json(modifyUser)
+    } catch (e) {
+      console.error(e)
+    }
   })
   .post(() => {})
-  .delete(function(
+  .delete(async function(
     {
       app: {
         locals: { users }
       },
       params: { id }
     },
-    res,
-    next
+    res
   ) {
-    console.log(id)
-    // eslint-disable-next-line no-undef,handle-callback-err
-    users.deleteOne({ _id: ObjectID(id) }, function(err, results) {})
-    res.json({ success: id })
+    try {
+      console.log(id)
+      // eslint-disable-next-line no-undef,handle-callback-err
+      await users.deleteOne({ _id: ObjectID(id) }, function(err, results) {})
+      res.json({ success: id })
+    } catch (e) {
+      console.error(e)
+    }
   })
 
 router
