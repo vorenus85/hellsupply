@@ -1,19 +1,21 @@
 <template lang="pug">
   v-form(ref="form" @submit="tryRegister" v-model="valid" lazy-validation)
     v-card(tile)
-      v-card-title Create account
+      v-card-title Create account to login HELLSupply
       v-card-text
-        v-text-field(v-model="name" :counter="5" :rules="nameRules" label="Name" required)
+        v-progress-linear(v-if="loading" indeterminate color="yellow darken-2")
+        v-text-field(v-model="name" :rules="nameRules" label="Name" required)
         v-text-field(v-model="email" :rules="emailRules" label="E-mail" required)
-        v-text-field(v-model="password" :counter="6" :rules="passwordRules" label="Password" type="password" required)
+        v-text-field(v-model="password" :rules="passwordRules" label="Password" type="password" required)
       v-card-actions
         v-btn(text tile :to="{ name: 'login' }" nuxt x-small) Back to login
         v-spacer
         v-btn(tile color="success" type="submit") register
+    v-snackbar(v-model="snackbar" :color="snackbarColor" :timeout="6000") {{snackbarText}}
+      v-btn(color="white" text @click="snackbar = false") Close
 </template>
 
 <script>
-import { names as coreNames } from '../store'
 export default {
   layout: 'centered',
   head: () => ({
@@ -21,37 +23,47 @@ export default {
   }),
   data: () => ({
     valid: false,
+    snackbar: false,
+    loading: false,
+    snackbarColor: 'info',
+    snackbarText: '',
     name: '',
     nameRules: [
       (v) => !!v || 'Name is required',
-      (v) => (v && v.length >= 5) || 'Name must be more than 5 characters'
+      (v) => v.length >= 6 || 'Name at least 6 or more characters'
     ],
     password: '',
     passwordRules: [
       (v) => !!v || 'Password is required',
-      (v) => (v && v.length >= 6) || 'Name must be more than 6 characters'
+      (v) =>
+        /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(v) ||
+        'Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters'
     ],
     email: '',
     emailRules: [
       (v) => !!v || 'E-mail is required',
-      (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+      (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'E-mail must be valid!'
     ]
   }),
   methods: {
-    validate() {
-      if (this.$refs.form.validate()) {
-        this.valid = true
-      }
-    },
     async register() {
       try {
-        await this.$axios.post(`/users/`, {
+        const { data: result } = await this.$axios.post(`/users/`, {
           name: this.name,
           email: this.email,
           password: this.password,
           role: 'user',
           active: false
         })
+        if (result.success) {
+          this.snackbarColor = 'success'
+        } else {
+          this.snackbarColor = 'error'
+        }
+        this.snackbarText = result.message
+        this.snackbar = true
+        this.loading = false
+        console.log(result)
       } catch (e) {
         this.errors.push(e)
         console.error(e)
@@ -59,15 +71,21 @@ export default {
     },
     async tryRegister(e) {
       e.preventDefault()
-      if (!this.valid) return
-      const valid = this.validate()
-      if (!valid) return
-      this.register()
-      const success = await this[coreNames.LOGIN]({
-        email: this.email,
-        password: this.password
-      })
-      if (success) this.$router.push({ name: 'index' })
+      this.loading = true
+      if (!this.valid) {
+        return false
+      }
+      const valid = this.$refs.form.validate()
+      if (!valid) {
+        this.loading = false
+        return false
+      }
+      try {
+        await this.register()
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
     }
   }
 }

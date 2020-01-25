@@ -1,7 +1,7 @@
 <template lang="pug">
   v-form(ref="login" @submit="tryLogin" v-model="valid")
     v-card(tile)
-      v-card-title AWESOMENESS always starts with a form
+      v-card-title Login to HELLSupply
       v-card-text
         v-progress-linear(v-if="loading" indeterminate color="yellow darken-2")
         .red--text(v-if="sent && error") Wrong username or password

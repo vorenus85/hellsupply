@@ -1,14 +1,51 @@
 const { Router } = require('express')
 const router = Router({ mergeParams: true })
 const { ObjectID } = require('mongodb')
+const bcrypt = require('bcrypt')
+
 router
   .route('/')
   .get((_, res) => res.send('LIST USERS'))
   .post(async function({ app: { locals }, params: { id }, body }, res) {
+    let result = { success: false, message: 'Unknown error'}
     const query = body
     const users = locals.users
-    const insertUsers = await users.insertOne(query)
-    res.json(insertUsers)
+    let tryInsert = true
+
+    const email = body.email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (emailRegex.test(email)) {
+    } else {
+      tryInsert = false
+      result = { success: false, message: 'E-mail must be valid!'}
+    }
+
+    try {
+      const pwd = await bcrypt.hash(body.password, 15)
+      query.password = pwd
+    } catch (e) {
+      console.error(e)
+    }
+
+    try {
+      const user = await locals.users.findOne({ email: body.email })
+      if(user) {
+        result = { success: false, message: 'That email address is already in use, please use a different email address!'}
+        tryInsert = false
+      }
+    } catch (e) {
+      console.error(e)
+    }
+
+    if(tryInsert) {
+      try {
+        await users.insertOne(query)
+        result = { success: true, message: 'Succesfully register! Please wait for activate!'}
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    res.json(result)
   })
 
 // test api: curl -i -H "Accept: application/json" localhost:8787/api/users/inactiveUsers

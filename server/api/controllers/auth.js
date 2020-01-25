@@ -31,6 +31,10 @@ router.post('/login', async ({ body, app: { locals } }, res) => {
     _removeAuthCookie(res)
     return res.json(result)
   }
+  if (!user.active) {
+    _removeAuthCookie(res)
+    return res.json(result)
+  }
   try {
     const samePWD = await bcrypt.compare(body.password, user.password)
     if (samePWD) {

@@ -5,15 +5,23 @@ const { ObjectID } = require('mongodb')
 router.get('/activeProducts', async function({ app: { locals } }, res) {
   const query = { active: true }
   const products = locals.products
-  const activeProducts = await products.find(query).toArray()
-  res.json(activeProducts)
+  try {
+    const activeProducts = await products.find(query).toArray()
+    res.json(activeProducts)
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 router.get('/selectedProduct', async function({ app: { locals } }, res) {
   const query = { name: 'Classic' }
   const products = locals.products
-  const defaultProduct = await products.find(query).toArray()
-  res.json(defaultProduct)
+  try {
+    const defaultProduct = await products.find(query).toArray()
+    res.json(defaultProduct)
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 router
@@ -31,8 +39,12 @@ router
   .post(async function({ app: { locals }, body }, res) {
     const query = body
     const products = locals.products
-    const insertProduct = await products.insertOne(query)
-    res.json(insertProduct)
+    try {
+      const insertProduct = await products.insertOne(query)
+      res.json(insertProduct)
+    } catch (e) {
+      console.error(e)
+    }
   })
 
 router
@@ -44,11 +56,15 @@ router
   .put(async function({ app: { locals }, params: { id }, body }, res) {
     const query = body
     const products = locals.products
-    const modifyProduct = await products.updateOne(
-      { _id: ObjectID(id) },
-      { $set: query }
-    )
-    res.json(modifyProduct)
+    try {
+      const modifyProduct = await products.updateOne(
+        { _id: ObjectID(id) },
+        { $set: query }
+      )
+      res.json(modifyProduct)
+    } catch (e) {
+      console.error(e)
+    }
   })
   .delete(function(
     {
@@ -60,10 +76,12 @@ router
     res,
     next
   ) {
-    console.log(id)
-    // eslint-disable-next-line no-undef,handle-callback-err
-    products.deleteOne({ _id: ObjectID(id) }, function(err, results) {})
-    res.json({ success: id })
+    try {
+      products.deleteOne({ _id: ObjectID(id) }, function(err, results) {})
+      res.json({ success: id })
+    } catch (e) {
+      console.error(e)
+    }
   })
 
 module.exports = router
