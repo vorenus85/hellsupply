@@ -139,13 +139,14 @@ export default {
       return result
     },
     submitOrder() {
-      const orderId = this.makeOrderId(12)
+      const orderId = this.makeOrderId(15)
       const orderTimestamp = new Date().getTime()
       try {
         this.$axios.post(`/orders/`, {
           orderId,
           email: this.$store.state.user.email,
           orderTotal: this.orderTotal,
+          status: 'RAW', // TODO STATUS TYPES:  'RAW', 'UNDER PROCESS', 'COMPLETED'
           timestamp: orderTimestamp
         })
       } catch (e) {

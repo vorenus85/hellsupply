@@ -25,4 +25,19 @@ router
     }
   })
 
+router
+  .route('/:id')
+  .get(async function({ app: { locals }, params: { id }, body }, res) {
+    // eslint-disable-next-line no-template-curly-in-string
+    const query = { orderId: id }
+    const orders = locals.orders
+    try {
+      // eslint-disable-next-line no-undef
+      const order = await orders.find(query).toArray()
+      res.json(order)
+    } catch (e) {
+      console.error(e)
+    }
+  })
+
 module.exports = router

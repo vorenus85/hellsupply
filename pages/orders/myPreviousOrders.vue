@@ -2,20 +2,25 @@
   div
     v-subheader(class="base-title")
       h1 {{pageTitle}}
-    v-simple-table
-      thead
-        tr
-          th(v-for="orderTitle in orderTable" :key="orderTitle") {{orderTitle}}
-      tbody
-        tr(v-for="order in orders" :key="order._id")
-          td {{order.timestamp | moment("YYYY. MM. Do hh:mm:ss") }}
-          td
-            v-chip(class="ma-2" small color="primary") {{order.orderTotal | currency }}
-          td
-            v-btn(color="primary" class="mx-2" outlined title="Inspect")
-              v-icon mdi-square-edit-outline
-            v-btn(color="red" class="mx-2" outlined title="Delete")
-              v-icon mdi-delete
+    div(class="row")
+      div(class="col-md-2")
+      div(class="col-md-8")
+        v-simple-table
+          thead
+            tr
+              th(v-for="orderTitle in orderTable" :key="orderTitle") {{orderTitle}}
+          tbody
+            tr(v-for="order in orders" :key="order._id")
+              td {{order.timestamp | moment("YYYY. MM. Do hh:mm:ss") }}
+              td
+                v-chip(class="ma-2" small color="primary") {{order.orderTotal | currency }}
+              td {{order.status}}
+              td
+                v-btn(color="primary" class="mx-2" outlined title="Inspect" :to="`/orders/${order.orderId}`")
+                  v-icon mdi-card-search
+                v-btn(color="red" class="mx-2" outlined title="Delete" v-if="order.status === 'RAW' ")
+                  v-icon mdi-delete
+      div(class="col-md-2")
 </template>
 <script>
 export default {
@@ -24,7 +29,7 @@ export default {
   }),
   data: () => ({
     pageTitle: 'My Previous Orders',
-    orderTable: ['Date', 'Total', ''],
+    orderTable: ['Date', 'Total', 'Status', ''],
     orders: []
   }),
   computed: {
@@ -34,7 +39,7 @@ export default {
   },
   mounted() {
     this.$axios
-      .get('/orders', { user: { email: this.loggedInEmail } })
+      .get('/orders', { email: this.loggedInEmail })
       .then((response) => (this.orders = response.data))
   }
 }
