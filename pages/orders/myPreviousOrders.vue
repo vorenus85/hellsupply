@@ -7,10 +7,10 @@
         tr
           th(v-for="orderTitle in orderTable" :key="orderTitle") {{orderTitle}}
       tbody
-        tr(v-for="order in orders" :key="order.datetime")
-          td {{order.datetime | moment("YYYY. MM. Do") }}
+        tr(v-for="order in orders" :key="order._id")
+          td {{order.timestamp | moment("YYYY. MM. Do hh:mm:ss") }}
           td
-            v-chip(class="ma-2" small color="primary") {{order.price | currency }}
+            v-chip(class="ma-2" small color="primary") {{order.orderTotal | currency }}
           td
             v-btn(color="primary" class="mx-2" outlined title="Megnéz")
               v-icon mdi-square-edit-outline
@@ -24,17 +24,18 @@ export default {
   }),
   data: () => ({
     pageTitle: 'Korábbi rendeléseim',
-    orderTable: ['Dátum', 'Összeg', 'Megnéz'],
-    orders: [
-      {
-        datetime: 1553885400,
-        price: 159
-      },
-      {
-        datetime: 1560365400,
-        price: 250
-      }
-    ]
-  })
+    orderTable: ['Dátum', 'Összeg', ''],
+    orders: []
+  }),
+  computed: {
+    loggedInEmail() {
+      return this.$store.state.user.email
+    }
+  },
+  mounted() {
+    this.$axios
+      .get('/orders', { user: { email: this.loggedInEmail } })
+      .then((response) => (this.orders = response.data))
+  }
 }
 </script>

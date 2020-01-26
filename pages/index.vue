@@ -132,6 +132,7 @@ export default {
         this.$axios.post(`/orders/`, {
           orders: this.orders,
           user: this.$store.state.user,
+          orderTotal: this.orderTotal,
           timestamp: orderTimestamp
         })
       } catch (e) {

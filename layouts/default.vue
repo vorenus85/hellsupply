@@ -23,6 +23,7 @@
       v-toolbar-title.py-2.pr-2.d-flex.align-center
         v-img.mr-2(src="/favicon.ico" width="32")
         span {{title}}
+      div(style="margin-left: auto") Üdv: {{loggedInName}}
     v-content
       v-container(fluid)
         nuxt
@@ -78,7 +79,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['loggedIn'])
+    ...mapState(['loggedIn']),
+    loggedInName() {
+      return this.$store.state.user.name
+    }
   },
   watch: {
     loggedIn(v) {
