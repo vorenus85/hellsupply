@@ -8,7 +8,7 @@ router
     const orders = locals.orders
     let allOrders = []
     try {
-      allOrders = await orders.find({ query }).toArray()
+      allOrders = await orders.find(query).toArray()
     } catch (e) {
       console.error(e)
     }
@@ -23,6 +23,20 @@ router
     } catch (e) {
       console.error(e)
     }
+  })
+
+router
+  .route('/byEmail/:email')
+  .get(async function({ app: { locals }, params: { email }, body }, res) {
+    const query = { email }
+    const orders = locals.orders
+    let ordersByEmail = []
+    try {
+      ordersByEmail = await orders.find(query).toArray()
+    } catch (e) {
+      console.error(e)
+    }
+    res.json(ordersByEmail)
   })
 
 router

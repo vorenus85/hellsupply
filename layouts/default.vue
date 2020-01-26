@@ -70,7 +70,7 @@ export default {
             },
             {
               title: 'Order Periods',
-              to: '/orders'
+              to: '/orders/periods'
             }
           ]
         }
