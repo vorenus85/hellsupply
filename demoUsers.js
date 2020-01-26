@@ -27,7 +27,6 @@ MongoClient.connect(
     try {
       users.insertMany([
         {
-          id: 1,
           name: 'Some User',
           email: 'someuser@hellsupply.com',
           password:
@@ -36,7 +35,6 @@ MongoClient.connect(
           active: true
         },
         {
-          id: 2,
           name: 'Somesome User',
           email: 'someuser33@hellsupply.com',
           password:
@@ -45,7 +43,6 @@ MongoClient.connect(
           active: false
         },
         {
-          id: 3,
           name: 'Another User',
           email: 'anotheruser@hellsupply.com',
           password:
@@ -54,7 +51,6 @@ MongoClient.connect(
           active: false
         },
         {
-          id: 4,
           name: 'Demo User',
           email: 'demouser@hellsupply.com',
           password:
@@ -63,7 +59,6 @@ MongoClient.connect(
           active: false
         },
         {
-          id: 5,
           name: 'Nobody User',
           email: 'nobodyuser@hellsupply.com',
           password:
