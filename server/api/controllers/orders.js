@@ -8,7 +8,7 @@ router
     const orders = locals.orders
     let allOrders = []
     try {
-      allOrders = await orders.find({query}).toArray()
+      allOrders = await orders.find({ query }).toArray()
     } catch (e) {
       console.error(e)
     }

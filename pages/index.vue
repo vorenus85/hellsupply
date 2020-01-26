@@ -126,12 +126,25 @@ export default {
     deleteFromCart(index) {
       this.orders.splice(index, 1)
     },
+    makeOrderId(length) {
+      let result = ''
+      const characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      const charactersLength = characters.length
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        )
+      }
+      return result
+    },
     submitOrder() {
+      const orderId = this.makeOrderId(12)
       const orderTimestamp = new Date().getTime()
       try {
         this.$axios.post(`/orders/`, {
-          orders: this.orders,
-          user: this.$store.state.user,
+          orderId,
+          email: this.$store.state.user.email,
           orderTotal: this.orderTotal,
           timestamp: orderTimestamp
         })
@@ -139,7 +152,38 @@ export default {
         this.errors.push(e)
         console.error(e)
       }
+
+      const orderItems = []
+
+      let n, orderItem
+      for (n in this.orders) {
+        const orderItemId = this.orders[n].item._id
+        const orderItemName = this.orders[n].item.name
+        const orderItemPrice = this.orders[n].item.price
+        const orderItemImage = this.orders[n].item.image
+        const orderItemQuantity = this.orders[n].quantity
+
+        orderItem = {
+          orderItemId,
+          orderItemName,
+          orderItemPrice,
+          orderItemImage,
+          orderItemQuantity,
+          orderId
+        }
+
+        orderItems.push(orderItem)
+      }
+
+      try {
+        this.$axios.post(`/orderItems/`, orderItems)
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+      console.dir(orderItems)
       this.orders = []
+      // TODO snackbar for checkout verification!
     },
     async addToCart(e) {
       e.preventDefault()

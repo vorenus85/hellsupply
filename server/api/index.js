@@ -45,6 +45,7 @@ MongoClient.connect(
     app.locals.users = db.collection('users')
     app.locals.products = db.collection('products')
     app.locals.orders = db.collection('orders')
+    app.locals.orderItems = db.collection('orderItems')
     consola.ready({
       message: `MongoDB connected`,
       badge: true
