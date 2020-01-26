@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueCurrencyFilter from 'vue-currency-filter'
 
 Vue.use(VueCurrencyFilter, {
-  symbol: 'Ft',
+  symbol: 'HUF',
   thousandsSeparator: ' ',
   fractionCount: 0,
   fractionSeparator: '.',

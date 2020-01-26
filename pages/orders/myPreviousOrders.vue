@@ -12,19 +12,19 @@
           td
             v-chip(class="ma-2" small color="primary") {{order.orderTotal | currency }}
           td
-            v-btn(color="primary" class="mx-2" outlined title="Megnéz")
+            v-btn(color="primary" class="mx-2" outlined title="Inspect")
               v-icon mdi-square-edit-outline
-            v-btn(color="red" class="mx-2" outlined title="Törlés")
+            v-btn(color="red" class="mx-2" outlined title="Delete")
               v-icon mdi-delete
 </template>
 <script>
 export default {
   head: () => ({
-    title: 'Korábbi rendeléseim'
+    title: 'My Previous Orders'
   }),
   data: () => ({
-    pageTitle: 'Korábbi rendeléseim',
-    orderTable: ['Dátum', 'Összeg', ''],
+    pageTitle: 'My Previous Orders',
+    orderTable: ['Date', 'Total', ''],
     orders: []
   }),
   computed: {

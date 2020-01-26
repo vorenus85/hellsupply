@@ -11,19 +11,19 @@
           td {{user.email}}
           td {{user.name}}
           td
-            v-btn(color="green" class="mx-2" outlined title="Engedélyezés" @click="activeUser(user._id)")
+            v-btn(color="green" class="mx-2" outlined title="Activate" @click="activeUser(user._id)")
               v-icon mdi-check
-            v-btn(color="red" class="mx-2" outlined title="Törlés" @click="deleteUser(user._id)")
+            v-btn(color="red" class="mx-2" outlined title="Delete" @click="deleteUser(user._id)")
               v-icon mdi-delete
 </template>
 <script>
 export default {
   head: () => ({
-    title: 'Inaktív regisztrálók'
+    title: 'Inactive Users'
   }),
   data: () => ({
-    pageTitle: 'Inaktív regisztrálók',
-    usersTable: ['E-mail cím', 'Név', 'Műveletek'],
+    pageTitle: 'Inactive Users',
+    usersTable: ['E-mail address', 'Name', ''],
     inactiveUsers: null
   }),
   async asyncData({ $axios }) {

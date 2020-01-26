@@ -8,13 +8,13 @@
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
-          <v-toolbar-title>Hell termékek</v-toolbar-title>
+          <v-toolbar-title>Hell Products</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on }">
               <v-btn v-on="on" color="primary" dark class="mb-2"
-                >Új termék</v-btn
+                >Add New Product</v-btn
               >
             </template>
             <v-card>
@@ -26,13 +26,13 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
-                      <v-text-field v-model="editedItem.image" label="Kép" />
+                      <v-text-field v-model="editedItem.image" label="Image" />
                     </v-col>
                     <v-col cols="12" sm="12" md="12">
-                      <v-text-field v-model="editedItem.name" label="Név" />
+                      <v-text-field v-model="editedItem.name" label="Name" />
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field v-model="editedItem.price" label="Ár" />
+                      <v-text-field v-model="editedItem.price" label="Price" />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -40,8 +40,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn @click="close" color="blue darken-1" text>Mégse</v-btn>
-                <v-btn @click="save" color="blue darken-1" text>Mentés</v-btn>
+                <v-btn @click="close" color="blue darken-1" text>Cancel</v-btn>
+                <v-btn @click="save" color="blue darken-1" text>Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -62,11 +62,18 @@
             @change="modifyItemState(item)"
             color="success"
             inset
+            title="Switch Status"
           />
-          <v-btn @click="editItem(item)" outlined class="mr-2" color="primary">
+          <v-btn
+            @click="editItem(item)"
+            outlined
+            class="mr-2"
+            color="primary"
+            title="Edit"
+          >
             <v-icon>mdi-square-edit-outline</v-icon>
           </v-btn>
-          <v-btn @click="deleteItem(item)" outlined color="red">
+          <v-btn @click="deleteItem(item)" outlined color="red" title="Delete">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </v-row>
@@ -77,20 +84,20 @@
 <script>
 export default {
   head: () => ({
-    title: 'Termékek'
+    title: 'Products'
   }),
   data: () => ({
     dialog: false,
     headers: [
       {
-        text: 'Kép',
+        text: 'Image',
         align: 'left',
         sortable: false,
         value: 'image'
       },
-      { text: 'Név', value: 'name' },
-      { text: 'Ár', value: 'price' },
-      { text: 'Műveletek', value: 'action', sortable: false }
+      { text: 'Name', value: 'name' },
+      { text: 'Price', value: 'price' },
+      { text: '', value: 'action', sortable: false }
     ],
     products: [],
     editedIndex: -1,
@@ -107,7 +114,7 @@ export default {
   }),
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'Új termék' : 'Termék szerkesztése'
+      return this.editedIndex === -1 ? 'New Product' : 'Edit Product'
     }
   },
   watch: {

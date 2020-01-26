@@ -18,12 +18,12 @@
           v-list-item-action
             v-icon mdi-logout
           v-list-item-content
-            v-list-item-title Kijelentkezés
+            v-list-item-title Logout
     v-app-bar(:clipped-left="true" fixed app elevation="1")
       v-toolbar-title.py-2.pr-2.d-flex.align-center
         v-img.mr-2(src="/favicon.ico" width="32")
         span {{title}}
-      div(style="margin-left: auto") Üdv: {{loggedInName}}
+      div(style="margin-left: auto") Hi, {{loggedInName}}
     v-content
       v-container(fluid)
         nuxt
@@ -39,37 +39,37 @@ export default {
       items: [
         {
           action: 'mdi-home',
-          title: 'Rendelés',
+          title: 'Order',
           active: true,
           items: [
             {
-              title: 'Rendelés leadás',
+              title: 'Make Order',
               to: '/'
             },
             {
-              title: 'Korábbi rendeléseim',
+              title: 'My Previous Orders',
               to: '/orders/myPreviousOrders'
             }
           ]
         },
         {
           action: 'mdi-account-badge-horizontal',
-          title: 'Adminisztráció',
+          title: 'Administrations',
           items: [
             {
-              title: 'Inaktív regisztrálók',
+              title: 'Inactive Users',
               to: '/users/inactiveUsers'
             },
             {
-              title: 'Aktív felhasználók',
+              title: 'Active Users',
               to: '/users/activeUsers'
             },
             {
-              title: 'Termékek',
+              title: 'Products',
               to: '/products'
             },
             {
-              title: 'Rendelési időszak',
+              title: 'Order Periods',
               to: '/orders'
             }
           ]

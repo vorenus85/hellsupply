@@ -6,33 +6,33 @@
       div(class="col-md-3")
       div(class="col-md-6")
         v-card(tile)
-          v-card-title Kosár
+          v-card-title Cart
           v-simple-table
             thead
               tr
-                th Kép
-                th Név
-                th Mennyiség
-                th Részösszeg
+                th Image
+                th Name
+                th Quantity
+                th Subtotal
                 th
             tbody
               tr(v-for="(order, index) in orders" :key="order.id")
                 td
                   v-img(:src="order.item.image" width="30px")
                 td {{ order.item.name }}
-                td {{ order.quantity }} db
+                td {{ order.quantity }} QTY
                 td {{ (order.quantity * order.item.price) | currency }}
                 td
-                  v-btn(color="red" class="mx-2" small outlined title="Törlés" @click="deleteFromCart(index)")
+                  v-btn(color="red" class="mx-2" small outlined title="Delete" @click="deleteFromCart(index)")
                     v-icon mdi-delete
               tr
                 td(colspan="2")
                 td
-                  strong Végösszeg:
+                  strong Total:
                 td
                   strong  {{ orderTotal | currency }}
                 td
-                  v-btn(color="success" class="mx-2" @click="submitOrder") Megrendel
+                  v-btn(color="success" class="mx-2" @click="submitOrder") Checkout
       div(class="col-md-3")
     div(class="row")
       div(class="col-md-2")
@@ -58,7 +58,7 @@
                   span.option__title.mx-2 {{ props.option.name }}
                   span.option__small
                     v-chip(class="ma-2" small color="primary") {{ props.option.price | currency }}
-            v-text-field(placeholder="Mennyiség (db)" type="number" class="col mx-3" min="1" v-model="quantity" :rules="quantityRules" required)
+            v-text-field(placeholder="Quantity (qty)" type="number" class="col mx-3" min="1" v-model="quantity" :rules="quantityRules" required)
             v-btn(color="primary" class="mx-3" fab type="submit")
               v-icon(light) mdi-plus-circle-outline
       div(class="col-md-2")
@@ -88,10 +88,10 @@ import Vue from 'vue'
 Vue.component('multiselect', Multiselect)
 export default {
   head: () => ({
-    title: 'Termékek hozzáadása'
+    title: 'Add to cart'
   }),
   data: () => ({
-    pageTitle: 'Rendelés',
+    pageTitle: 'Make Order',
     selectedProduct: null,
     activeProducts: null,
     orders: [],
