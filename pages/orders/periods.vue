@@ -14,6 +14,7 @@
                 v-text-field(type="date" class="mx-3" v-model="newPeriodStart" :rules="newPeriodStartRules" required)
                 v-text-field(type="date" class="mx-3" v-model="newPeriodEnd" :rules="newPeriodEndRules" required)
                 v-btn(color="primary" class="mx-3" type="submit") Add new period
+      div(class="col-md-6")
         div(class="col-md-12")
           v-card
             v-card-title All periods
@@ -31,7 +32,8 @@
                   td
                     v-btn(color="primary" class="mx-2" outlined title="Inspect" @click="showPeriodOrders(period.periodStart, period.periodEnd)")
                       v-icon mdi-card-search
-      div(class="col-md-6")
+    div(class="row")
+      div(class="col-md-12")
         v-card
           v-card-title
             span Orders of period:
@@ -47,12 +49,14 @@
                 td {{order.email}}
                 td
                   v-chip(class="ma-2" small color="primary") {{order.orderTotal | currency }}
-                td {{order.status}}
+                td
+                  v-select(class="mt-4" :items="orderStatuses" v-model="order.status" label="Solo field" solo) //TODO modify orderState
                 td
                   v-btn(color="primary" class="mx-2" outlined title="Inspect" :to="`/orders/${order.orderId}`")
                     v-icon mdi-card-search
                   v-btn(color="red" class="mx-2" outlined title="Delete" v-if="order.status === 'RAW' ")
                     v-icon mdi-delete
+      div(class="col-md-12")
         v-card(class="mt-3")
           v-card-title
             span Ordered products of period:
@@ -66,6 +70,7 @@ export default {
   data: () => ({
     valid: false,
     orderTable: ['Date', 'E-mail', 'Total', 'Status', ''],
+    orderStatuses: ['RAW', 'UNDER PROCESS', 'COMPLETED'],
     pageTitle: 'Order periods',
     newPeriodStart: '2020-01-01',
     newPeriodStartRules: [(v) => !!v || 'Starting date is required'],
