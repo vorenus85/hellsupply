@@ -36,7 +36,10 @@
       div(class="col-md-3")
     div(class="row")
       div(class="col-md-2")
-      div(class="col-md-8")
+      div(class="col-md-8" v-if="!shoppingIsAvailable")
+        v-card
+          v-card-title Currently ordering is not available!
+      div(class="col-md-8" v-if="shoppingIsAvailable")
         v-form(ref="form" @submit="addToCart" v-model="valid" lazy-validation)
           v-row(class="justify-center align-center no-gutters")
             multiselect(
@@ -97,7 +100,9 @@ export default {
     orders: [],
     valid: false,
     quantity: '',
-    quantityRules: [(v) => !!v || 'Quantity is required']
+    quantityRules: [(v) => !!v || 'Quantity is required'],
+    shoppingIsAvailable: false,
+    actualPeriod: ''
   }),
   computed: {
     orderTotal() {
@@ -122,9 +127,24 @@ export default {
       selectedProduct: selectedProductResponse.data[0]
     }
   },
+  mounted() {
+    this.findOrderPeriod()
+  },
   methods: {
     deleteFromCart(index) {
       this.orders.splice(index, 1)
+    },
+    async findOrderPeriod() {
+      const currentTime = new Date().getTime()
+      try {
+        await this.$axios
+          .get(`/periods/actual/${currentTime}`)
+          .then((response) => (this.actualPeriod = response.data[0]))
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+      if (this.actualPeriod !== undefined) this.shoppingIsAvailable = true
     },
     makeOrderId(length) {
       let result = ''
@@ -166,6 +186,7 @@ export default {
 
         orderItem = {
           orderItemId,
+          orderTimestamp,
           orderItemName,
           orderItemPrice,
           orderItemImage,

@@ -3,7 +3,7 @@ const router = Router({ mergeParams: true })
 
 router
   .route('/')
-  .get(async function({ app: { locals, body } }, res) {
+  .get(async function({ app: { locals }, body }, res) {
     const query = body
     const orders = locals.orders
     let allOrders = []
@@ -23,6 +23,20 @@ router
     } catch (e) {
       console.error(e)
     }
+  })
+
+router
+  .route('/byPeriod/:start/:end')
+  .get(async function({ app: { locals }, params: { start, end }, body }, res) {
+    const query = { timestamp: { $gte: parseInt(start), $lt: parseInt(end) } }
+    const orders = locals.orders
+    let ordersByPeriod = []
+    try {
+      ordersByPeriod = await orders.find(query).toArray()
+    } catch (e) {
+      console.error(e)
+    }
+    res.json(ordersByPeriod)
   })
 
 router
