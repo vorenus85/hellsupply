@@ -18,7 +18,7 @@
               td
                 v-btn(color="primary" class="mx-2" outlined title="Inspect" :to="`/orders/${order.orderId}`")
                   v-icon mdi-card-search
-                v-btn(color="red" class="mx-2" outlined title="Delete" v-if="order.status === 'RAW' ")
+                v-btn(color="red" class="mx-2" outlined title="Delete" v-if="order.status === 'RAW' " @click="deleteOrder(order)")
                   v-icon mdi-delete
       div(class="col-md-2")
 </template>
@@ -41,6 +41,26 @@ export default {
     this.$axios
       .get(`/orders/byEmail/${this.loggedInEmail}`)
       .then((response) => (this.orders = response.data))
+  },
+  methods: {
+    // TODO kiemelni
+    async deleteOrder(order) {
+      const orderId = order._id
+      try {
+        await this.$axios.delete(`/orders/${orderId}`)
+        this.orders = this.orders.filter((order) => order._id !== orderId)
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+      const orderItemOrderId = order.orderId
+      try {
+        await this.$axios.delete(`/orderItems/${orderItemOrderId}`)
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+    }
   }
 }
 </script>

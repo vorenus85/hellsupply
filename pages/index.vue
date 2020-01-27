@@ -165,7 +165,7 @@ export default {
         this.$axios.post(`/orders/`, {
           orderId,
           email: this.$store.state.user.email,
-          orderTotal: this.orderTotal,
+          orderTotal: parseInt(this.orderTotal),
           status: 'RAW', // TODO STATUS TYPES:  'RAW', 'UNDER PROCESS', 'COMPLETED'
           timestamp: orderTimestamp
         })
@@ -183,14 +183,13 @@ export default {
         const orderItemPrice = this.orders[n].item.price
         const orderItemImage = this.orders[n].item.image
         const orderItemQuantity = this.orders[n].quantity
-
         orderItem = {
           orderItemId,
-          orderTimestamp,
+          orderTimestamp: parseInt(orderTimestamp),
           orderItemName,
-          orderItemPrice,
+          orderItemPrice: parseInt(orderItemPrice),
           orderItemImage,
-          orderItemQuantity,
+          orderItemQuantity: parseInt(orderItemQuantity),
           orderId
         }
 

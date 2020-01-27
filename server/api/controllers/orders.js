@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const router = Router({ mergeParams: true })
+const { ObjectID } = require('mongodb')
 
 router
   .route('/')
@@ -63,6 +64,23 @@ router
       // eslint-disable-next-line no-undef
       const order = await orders.find(query).toArray()
       res.json(order)
+    } catch (e) {
+      console.error(e)
+    }
+  })
+  .delete(function(
+    {
+      app: {
+        locals: { orders }
+      },
+      params: { id }
+    },
+    res,
+    next
+  ) {
+    try {
+      orders.deleteOne({ _id: ObjectID(id) }, function(err, results) {})
+      res.json({ success: id })
     } catch (e) {
       console.error(e)
     }

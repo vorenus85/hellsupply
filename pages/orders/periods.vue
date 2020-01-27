@@ -30,6 +30,8 @@
                   td {{ period.periodStart | moment("YYYY. MM. DD.") }}
                   td {{ period.periodEnd | moment("YYYY. MM. DD.") }}
                   td
+                    //TODO DELETE periods
+                    //TODO activate/deactivate periods
                     v-btn(color="primary" class="mx-2" outlined title="Inspect" @click="showPeriodOrders(period.periodStart, period.periodEnd)")
                       v-icon mdi-card-search
     div(class="row")
@@ -54,7 +56,7 @@
                 td
                   v-btn(color="primary" class="mx-2" outlined title="Inspect" :to="`/orders/${order.orderId}`")
                     v-icon mdi-card-search
-                  v-btn(color="red" class="mx-2" outlined title="Delete" v-if="order.status === 'RAW' ")
+                  v-btn(color="red" class="mx-2" outlined title="Delete" v-if="order.status === 'RAW' " @click="deleteOrder(order)")
                     v-icon mdi-delete
       div(class="col-md-12")
         v-card(class="mt-3")
@@ -97,6 +99,26 @@ export default {
         this.$axios
           .get(`/orders/byPeriod/${periodStart}/${periodEnd}`)
           .then((response) => (this.ordersByPeriod = response.data))
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+    },
+    // TODO kiemelni
+    async deleteOrder(order) {
+      const orderId = order._id
+      try {
+        await this.$axios.delete(`/orders/${orderId}`)
+        this.ordersByPeriod = this.ordersByPeriod.filter(
+          (order) => order._id !== orderId
+        )
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+      const orderItemOrderId = order.orderId
+      try {
+        await this.$axios.delete(`/orderItems/${orderItemOrderId}`)
       } catch (e) {
         this.errors.push(e)
         console.error(e)

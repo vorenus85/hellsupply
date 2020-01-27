@@ -16,6 +16,36 @@ router
   })
 
 router
+  .route('/aggregated/:periodStart/:periodEnd')
+  .get(async function(
+    { app: { locals }, params: { periodStart, periodEnd }, body },
+    res
+  ) {
+    const query = [
+      { $match: { orderTimestamp: { $gte: periodStart, $lte: periodEnd } } },
+      {
+        $group: {
+          _id: '$orderItemName',
+          orderId: { $first: '$orderId' },
+          name: { $first: '$orderItemName' },
+          image: { $first: 'orderItemImage' },
+          price: { $first: '$orderItemPrice' },
+          sumQuantity: {
+            $sum: '$orderItemQuantity'
+          }
+        }
+      }
+    ]
+    const orderItems = locals.orderItems
+    try {
+      const listAggregatedOrderItems = await orderItems.insertMany(query)
+      res.json(listAggregatedOrderItems)
+    } catch (e) {
+      console.error(e)
+    }
+  })
+
+router
   .route('/:id')
   .get(async function({ app: { locals }, params: { id }, body }, res) {
     const orderId = id
@@ -24,6 +54,29 @@ router
       // eslint-disable-next-line no-undef
       const orderItems = await locals.orderItems.find(query).toArray()
       res.json(orderItems)
+    } catch (e) {
+      console.error(e)
+    }
+  })
+  .delete(async function(
+    {
+      app: {
+        locals: { orderItems }
+      },
+      params: { id },
+      body
+    },
+    res,
+    next
+  ) {
+    const query = { orderId: id }
+    try {
+      // eslint-disable-next-line handle-callback-err
+      const deletedOrderItems = await orderItems.deleteMany(query, function(
+        err,
+        results
+      ) {})
+      res.json(deletedOrderItems)
     } catch (e) {
       console.error(e)
     }
