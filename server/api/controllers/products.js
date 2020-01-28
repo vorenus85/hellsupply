@@ -6,7 +6,7 @@ router.get('/activeProducts', async function({ app: { locals } }, res) {
   const query = { active: true }
   const products = locals.products
   try {
-    const activeProducts = await products.find(query).toArray()
+    const activeProducts = await products.find(query).sort({name:1}).toArray()
     res.json(activeProducts)
   } catch (e) {
     console.error(e)

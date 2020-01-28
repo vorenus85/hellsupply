@@ -16,14 +16,16 @@ router
     res.json(allOrders)
   })
   .post(async function({ app: { locals }, body }, res) {
+    let result = { success: false, message: 'Unknown error' }
     const query = body
     const orders = locals.orders
     try {
-      const insertOrders = await orders.insertOne(query)
-      res.json(insertOrders)
+      await orders.insertOne(query)
+      result = { success: true, message: 'Successful order! Thank you!' }
     } catch (e) {
       console.error(e)
     }
+    res.json(result)
   })
 
 router

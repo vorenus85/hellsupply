@@ -8,7 +8,7 @@
           v-card
             v-card-title Add new period
             v-card-text
-              .red--text(v-if="invalid") {{errorMessage}}
+              .red--text(v-if="addNewPeriodValid") {{errorMessage}}
             v-form(ref="form" @submit="addNewPeriod" v-model="valid" lazy-validation)
               v-card-actions
                 v-text-field(type="date" class="mx-3" v-model="newPeriodStart" :rules="newPeriodStartRules" required)
@@ -24,16 +24,18 @@
                 tr
                   th Start
                   th End
-                  th Status
+                  th Actions
               tbody
                 tr(v-for="period in periods" :key="period._id")
                   td {{ period.periodStart | moment("YYYY. MM. DD.") }}
                   td {{ period.periodEnd | moment("YYYY. MM. DD.") }}
                   td
-                    //TODO DELETE periods
-                    //TODO activate/deactivate periods
-                    v-btn(color="primary" class="mx-2" outlined title="Inspect" @click="showOrdersByPeriod(period.periodStart, period.periodEnd), showAggregatedOrderItemsByPeriod(period.periodStart, period.periodEnd)")
-                      v-icon mdi-card-search
+                    v-row(class="align-center no-gutters")
+                      v-switch(v-model="period.status" @change="modifyPeriodState(period)" color="success" inset title="Switch Status")
+                      v-btn(color="primary" class="mx-2" outlined title="Inspect" @click="showOrdersByPeriod(period.periodStart, period.periodEnd), showAggregatedOrderItemsByPeriod(period.periodStart, period.periodEnd)")
+                        v-icon mdi-card-search
+                      v-btn(@click="deletePeriod(period)" outlined color="red" title="Delete")
+                        v-icon mdi-delete
     div(class="row")
       div(class="col-md-12")
         v-card
@@ -120,7 +122,7 @@ export default {
     newPeriodEnd: '2020-01-01',
     newPeriodEndRules: [(v) => !!v || 'Ending date is required'],
     errorMessage: 'Unknown error',
-    invalid: false,
+    addNewPeriodValid: false,
     ordersByPeriod: [],
     calculatedSumOrderItems: [],
     aggregatedOrderItemsByPeriod: [],
@@ -148,11 +150,31 @@ export default {
     }
   },
   mounted() {
-    console.log('mounted')
     this.listPeriods()
     this.findOrderPeriod()
   },
   methods: {
+    async modifyPeriodState(item) {
+      const periodId = item._id
+      try {
+        await this.$axios.put(`/periods/${periodId}`, {
+          status: item.status
+        })
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+    },
+    async deletePeriod(item) {
+      const periodId = item._id
+      try {
+        await this.$axios.delete(`/periods/${periodId}`)
+        this.periods = this.periods.filter((period) => period._id !== periodId)
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+    },
     async showAggregatedOrderItemsByPeriod(periodStart, periodEnd) {
       try {
         await this.$axios
@@ -189,7 +211,6 @@ export default {
           calculatedSumOrderItems[n].orderItemQuantity
         calculatedSumOrderItems[n].trayPrice =
           calculatedSumOrderItems[n].orderItemPrice * 24
-        console.dir(calculatedSumOrderItems[n])
       }
       this.calculatedSumOrderItems = calculatedSumOrderItems
     },
@@ -261,6 +282,13 @@ export default {
     addNewPeriod(e) {
       e.preventDefault()
       // TODO date validate!
+      const periodStart = new Date(this.newPeriodStart).getTime()
+      const periodEnd = new Date(this.newPeriodEnd).getTime()
+      if (periodEnd <= periodStart) {
+        this.addNewPeriodValid = true
+        this.errorMessage = 'Start date must earlier than End date!'
+        return false
+      }
       if (!this.valid) {
         return false
       }
@@ -268,12 +296,6 @@ export default {
       if (!valid) {
         return false
       }
-
-      const periodStart = new Date(this.newPeriodStart).getTime()
-      const periodEnd = new Date(this.newPeriodEnd).getTime()
-
-      console.log(periodStart)
-      console.log(periodEnd)
       try {
         this.$axios.post(`/periods`, {
           periodStart,

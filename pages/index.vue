@@ -65,6 +65,8 @@
             v-btn(color="primary" class="mx-3" fab type="submit")
               v-icon(light) mdi-plus-circle-outline
       div(class="col-md-2")
+    v-snackbar(v-model="snackbar" :color="snackbarColor" :timeout="6000") {{snackbarText}}
+      v-btn(color="white" text @click="snackbar = false") Close
 </template>
 <style lang="scss">
 .option__image {
@@ -95,6 +97,9 @@ export default {
   }),
   data: () => ({
     pageTitle: 'Make Order',
+    snackbar: false,
+    snackbarColor: 'info',
+    snackbarText: '',
     selectedProduct: null,
     activeProducts: null,
     orders: [],
@@ -144,7 +149,12 @@ export default {
         this.errors.push(e)
         console.error(e)
       }
-      if (this.actualPeriod !== undefined) this.shoppingIsAvailable = true
+      if (
+        this.actualPeriod !== undefined &&
+        this.actualPeriod.status === true
+      ) {
+        this.shoppingIsAvailable = true
+      }
     },
     makeOrderId(length) {
       let result = ''
@@ -158,22 +168,28 @@ export default {
       }
       return result
     },
-    submitOrder() {
+    async submitOrder() {
       const orderId = this.makeOrderId(15)
       const orderTimestamp = new Date().getTime()
       try {
-        this.$axios.post(`/orders/`, {
+        const { data: result } = await this.$axios.post(`/orders/`, {
           orderId,
           email: this.$store.state.user.email,
           orderTotal: parseInt(this.orderTotal),
           status: 'RAW', // TODO STATUS TYPES:  'RAW', 'UNDER PROCESS', 'COMPLETED'
           timestamp: orderTimestamp
         })
+        if (result.success) {
+          this.snackbarColor = 'success'
+        } else {
+          this.snackbarColor = 'error'
+        }
+        this.snackbarText = result.message
+        this.snackbar = true
       } catch (e) {
         this.errors.push(e)
         console.error(e)
       }
-
       const orderItems = []
 
       let n, orderItem
@@ -197,14 +213,13 @@ export default {
       }
 
       try {
-        this.$axios.post(`/orderItems/`, orderItems)
+        await this.$axios.post(`/orderItems/`, orderItems)
       } catch (e) {
         this.errors.push(e)
         console.error(e)
       }
       console.dir(orderItems)
       this.orders = []
-      // TODO snackbar for checkout verification!
     },
     async addToCart(e) {
       e.preventDefault()

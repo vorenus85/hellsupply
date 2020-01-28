@@ -23,8 +23,8 @@ export default {
   }),
   data: () => ({
     valid: false,
-    snackbar: false,
     loading: false,
+    snackbar: false,
     snackbarColor: 'info',
     snackbarText: '',
     name: '',

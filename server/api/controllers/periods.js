@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const router = Router({ mergeParams: true })
+const { ObjectID } = require('mongodb')
 
 router
   .route('/')
@@ -8,7 +9,7 @@ router
     const periods = locals.periods
     let allPeriods= []
     try {
-      allPeriods = await periods.find(query).toArray()
+      allPeriods = await periods.find(query).sort({periodStart:1}).toArray()
     } catch (e) {
       console.error(e)
     }
@@ -20,6 +21,39 @@ router
     try {
       const insertPeriods = await periods.insertOne(query)
       res.json(insertPeriods)
+    } catch (e) {
+      console.error(e)
+    }
+  })
+
+router
+  .route('/:id')
+  .put(async function({ app: { locals }, params: { id }, body }, res) {
+    const query = body
+    const periods = locals.periods
+    try {
+      const modifyPeriods = await periods.updateOne(
+        { _id: ObjectID(id) },
+        { $set: query }
+      )
+      res.json(modifyPeriods)
+    } catch (e) {
+      console.error(e)
+    }
+  })
+  .delete(function(
+    {
+      app: {
+        locals: { periods }
+      },
+      params: { id }
+    },
+    res,
+    next
+  ) {
+    try {
+      periods.deleteOne({ _id: ObjectID(id) }, function(err, results) {})
+      res.json({ success: id })
     } catch (e) {
       console.error(e)
     }
@@ -40,7 +74,7 @@ router
     const periods = locals.periods
     let actualPeriod = []
     try {
-      actualPeriod = await periods.find(query).toArray()
+      actualPeriod = await periods.find(query).sort({periodStart:1}).toArray()
     } catch (e) {
       console.error(e)
     }
