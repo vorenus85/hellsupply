@@ -64,11 +64,19 @@
             span Ordered products of period:
             v-chip(class="ma-2" small color="primary") {{ selectedPeriodStart | moment("YYYY. MM. DD.") }} - {{ selectedPeriodEnd | moment("YYYY. MM. DD.") }}
         div
-          v-data-table(:headers="headers" :items="aggregatedOrderItemsByPeriod" :search="search")
+          v-data-table(:headers="headers" :items="calculatedSumOrderItems" :search="search")
             template(v-slot:item.image="{ item }")
               v-img( :src="item.image" :alt="item.name" width="30px")
+            template(v-slot:item.trayQty="{ item }")
+              strong {{ item.trayQty }}
+            template(v-slot:item.trayPrice="{ item }")
+              v-chip(class="ma-2" small color="secondary") {{ item.trayPrice | currency }}
             template(v-slot:item.orderItemPrice="{ item }")
-              v-chip(class="ma-2" small color="primary") {{ item.orderItemPrice | currency }}
+              v-chip(class="ma-2" small color="secondary") {{ item.orderItemPrice | currency }}
+            template(v-slot:item.payedByCompany="{ item }")
+              v-chip(class="ma-2" small color="error") {{ item.payedByCompany | currency }}
+            template(v-slot:item.subTotal="{ item }")
+              v-chip(class="ma-2" small color="primary") {{ item.subTotal | currency }}
 </template>
 <script>
 export default {
@@ -81,8 +89,13 @@ export default {
     headers: [
       { text: 'Image', value: 'image' },
       { text: 'Name', value: 'name' },
-      { text: 'Price', value: 'orderItemPrice' },
-      { text: 'Qty', value: 'orderItemQuantity' }
+      { text: 'Requested Tray', value: 'trayQty' },
+      { text: 'Price / Tray', value: 'trayPrice' },
+      { text: 'Price / Qty', value: 'orderItemPrice' },
+      { text: 'plusQty', value: 'plusQty' },
+      { text: 'Payed by company', value: 'payedByCompany' },
+      { text: 'Ordered Qty by person', value: 'orderItemQuantity' },
+      { text: 'Payed by person', value: 'subTotal' }
     ],
     orderTable: ['Date', 'E-mail', 'Total', 'Status', ''],
     orderStatuses: ['RAW', 'UNDER PROCESS', 'COMPLETED'],
@@ -94,6 +107,7 @@ export default {
     errorMessage: 'Unknown error',
     invalid: false,
     ordersByPeriod: [],
+    calculatedSumOrderItems: [],
     aggregatedOrderItemsByPeriod: [],
     periods: [],
     selectedPeriodStart: 0,
@@ -107,8 +121,6 @@ export default {
   },
   methods: {
     async showAggregatedOrderItemsByPeriod(periodStart, periodEnd) {
-      console.log('periodStart ' + periodStart)
-      console.log('periodEnd ' + periodEnd)
       try {
         await this.$axios
           .get(`/orderItems/aggregated/${periodStart}/${periodEnd}`)
@@ -119,6 +131,29 @@ export default {
         this.errors.push(e)
         console.error(e)
       }
+      const calculatedSumOrderItems = this.aggregatedOrderItemsByPeriod
+      let n
+      for (n in calculatedSumOrderItems) {
+        if (calculatedSumOrderItems[n].orderItemQuantity <= 24) {
+          calculatedSumOrderItems[n].trayQty = 1
+        } else {
+          calculatedSumOrderItems[n].trayQty = Math.ceil(
+            calculatedSumOrderItems[n].orderItemQuantity / 24
+          )
+        }
+        calculatedSumOrderItems[n].plusQty =
+          calculatedSumOrderItems[n].orderItemQuantity % 24
+        calculatedSumOrderItems[n].payedByCompany =
+          calculatedSumOrderItems[n].plusQty *
+          calculatedSumOrderItems[n].orderItemPrice
+        calculatedSumOrderItems[n].subTotal =
+          calculatedSumOrderItems[n].orderItemPrice *
+          calculatedSumOrderItems[n].orderItemQuantity
+        calculatedSumOrderItems[n].trayPrice =
+          calculatedSumOrderItems[n].orderItemPrice * 24
+        console.dir(calculatedSumOrderItems[n])
+      }
+      this.calculatedSumOrderItems = calculatedSumOrderItems
     },
     async showOrdersByPeriod(periodStart, periodEnd) {
       this.selectedPeriodStart = periodStart
