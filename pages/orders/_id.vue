@@ -44,9 +44,11 @@
               td
                 v-img(:src="order.orderItemImage" width="30px")
               td {{ order.orderItemName }}
-              td {{ order.orderItemPrice | currency }}
+              td
+                v-chip(class="ma-2" small color="primary") {{ order.orderItemPrice | currency }}
               td {{ order.orderItemQuantity }} QTY
-              td {{ (order.orderItemQuantity * order.orderItemPrice) | currency }}
+              td
+                v-chip(class="ma-2" small color="secondary") {{ (order.orderItemQuantity * order.orderItemPrice) | currency }}
       div(class="col-md-2")
 </template>
 <script>

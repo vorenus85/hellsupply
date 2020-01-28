@@ -32,7 +32,7 @@
                   td
                     //TODO DELETE periods
                     //TODO activate/deactivate periods
-                    v-btn(color="primary" class="mx-2" outlined title="Inspect" @click="showPeriodOrders(period.periodStart, period.periodEnd)")
+                    v-btn(color="primary" class="mx-2" outlined title="Inspect" @click="showOrdersByPeriod(period.periodStart, period.periodEnd), showAggregatedOrderItemsByPeriod(period.periodStart, period.periodEnd)")
                       v-icon mdi-card-search
     div(class="row")
       div(class="col-md-12")
@@ -63,6 +63,12 @@
           v-card-title
             span Ordered products of period:
             v-chip(class="ma-2" small color="primary") {{ selectedPeriodStart | moment("YYYY. MM. DD.") }} - {{ selectedPeriodEnd | moment("YYYY. MM. DD.") }}
+        div
+          v-data-table(:headers="headers" :items="aggregatedOrderItemsByPeriod" :search="search")
+            template(v-slot:item.image="{ item }")
+              v-img( :src="item.image" :alt="item.name" width="30px")
+            template(v-slot:item.orderItemPrice="{ item }")
+              v-chip(class="ma-2" small color="primary") {{ item.orderItemPrice | currency }}
 </template>
 <script>
 export default {
@@ -71,6 +77,13 @@ export default {
   }),
   data: () => ({
     valid: false,
+    search: '',
+    headers: [
+      { text: 'Image', value: 'image' },
+      { text: 'Name', value: 'name' },
+      { text: 'Price', value: 'orderItemPrice' },
+      { text: 'Qty', value: 'orderItemQuantity' }
+    ],
     orderTable: ['Date', 'E-mail', 'Total', 'Status', ''],
     orderStatuses: ['RAW', 'UNDER PROCESS', 'COMPLETED'],
     pageTitle: 'Order periods',
@@ -81,6 +94,7 @@ export default {
     errorMessage: 'Unknown error',
     invalid: false,
     ordersByPeriod: [],
+    aggregatedOrderItemsByPeriod: [],
     periods: [],
     selectedPeriodStart: 0,
     selectedPeriodEnd: 0,
@@ -92,11 +106,25 @@ export default {
     this.findOrderPeriod()
   },
   methods: {
-    showPeriodOrders(periodStart, periodEnd) {
+    async showAggregatedOrderItemsByPeriod(periodStart, periodEnd) {
+      console.log('periodStart ' + periodStart)
+      console.log('periodEnd ' + periodEnd)
+      try {
+        await this.$axios
+          .get(`/orderItems/aggregated/${periodStart}/${periodEnd}`)
+          .then(
+            (response) => (this.aggregatedOrderItemsByPeriod = response.data)
+          )
+      } catch (e) {
+        this.errors.push(e)
+        console.error(e)
+      }
+    },
+    async showOrdersByPeriod(periodStart, periodEnd) {
       this.selectedPeriodStart = periodStart
       this.selectedPeriodEnd = periodEnd
       try {
-        this.$axios
+        await this.$axios
           .get(`/orders/byPeriod/${periodStart}/${periodEnd}`)
           .then((response) => (this.ordersByPeriod = response.data))
       } catch (e) {
@@ -137,7 +165,14 @@ export default {
       if (this.actualPeriod !== undefined) {
         this.selectedPeriodStart = this.actualPeriod.periodStart
         this.selectedPeriodEnd = this.actualPeriod.periodEnd
-        this.showPeriodOrders(this.selectedPeriodStart, this.selectedPeriodEnd)
+        this.showOrdersByPeriod(
+          this.selectedPeriodStart,
+          this.selectedPeriodEnd
+        )
+        this.showAggregatedOrderItemsByPeriod(
+          this.selectedPeriodStart,
+          this.selectedPeriodEnd
+        )
       }
     },
     listPeriods() {

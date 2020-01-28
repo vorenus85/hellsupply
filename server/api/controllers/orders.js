@@ -68,6 +68,19 @@ router
       console.error(e)
     }
   })
+  .put(async function({ app: { locals }, params: { id }, body }, res) {
+    const query = body
+    const orders = locals.orders
+    try {
+      const modifyOrders = await orders.updateOne(
+        { _id: ObjectID(id) },
+        { $set: query }
+      )
+      res.json(modifyOrders)
+    } catch (e) {
+      console.error(e)
+    }
+  })
   .delete(function(
     {
       app: {
@@ -79,6 +92,7 @@ router
     next
   ) {
     try {
+      // eslint-disable-next-line handle-callback-err
       orders.deleteOne({ _id: ObjectID(id) }, function(err, results) {})
       res.json({ success: id })
     } catch (e) {

@@ -7,7 +7,7 @@ router
   .route('/')
   .get((_, res) => res.send('LIST USERS'))
   .post(async function({ app: { locals }, params: { id }, body }, res) {
-    let result = { success: false, message: 'Unknown error'}
+    let result = { success: false, message: 'Unknown error' }
     const query = body
     const users = locals.users
     let tryInsert = true
@@ -17,7 +17,7 @@ router
     if (emailRegex.test(email)) {
     } else {
       tryInsert = false
-      result = { success: false, message: 'E-mail must be valid!'}
+      result = { success: false, message: 'E-mail must be valid!' }
     }
 
     try {
@@ -29,18 +29,25 @@ router
 
     try {
       const user = await locals.users.findOne({ email: body.email })
-      if(user) {
-        result = { success: false, message: 'That email address is already in use, please use a different email address!'}
+      if (user) {
+        result = {
+          success: false,
+          message:
+            'That email address is already in use, please use a different email address!'
+        }
         tryInsert = false
       }
     } catch (e) {
       console.error(e)
     }
 
-    if(tryInsert) {
+    if (tryInsert) {
       try {
         await users.insertOne(query)
-        result = { success: true, message: 'Succesfully register! Please wait for activate!'}
+        result = {
+          success: true,
+          message: 'Succesfully register! Please wait for activate!'
+        }
       } catch (e) {
         console.error(e)
       }

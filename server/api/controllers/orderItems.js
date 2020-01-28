@@ -21,25 +21,38 @@ router
     { app: { locals }, params: { periodStart, periodEnd }, body },
     res
   ) {
-    const query = [
-      { $match: { orderTimestamp: { $gte: periodStart, $lte: periodEnd } } },
-      {
-        $group: {
-          _id: '$orderItemName',
-          orderId: { $first: '$orderId' },
-          name: { $first: '$orderItemName' },
-          image: { $first: 'orderItemImage' },
-          price: { $first: '$orderItemPrice' },
-          sumQuantity: {
-            $sum: '$orderItemQuantity'
-          }
-        }
-      }
-    ]
-    const orderItems = locals.orderItems
+    console.log('periodStart ' + periodStart)
+    console.log('periodEnd ' + periodEnd)
     try {
-      const listAggregatedOrderItems = await orderItems.insertMany(query)
-      res.json(listAggregatedOrderItems)
+      const list = await locals.orderItems
+        .aggregate([
+          {
+            $match: {
+              orderTimestamp: {
+                $gte: parseInt(periodStart),
+                $lte: parseInt(periodEnd)
+              }
+            }
+          },
+          {
+            $group: {
+              _id: '$orderItemName',
+              name: { $first: '$orderItemName' },
+              image: { $first: '$orderItemImage' },
+              orderItemPrice: { $first: '$orderItemPrice' },
+              orderItemQuantity: {
+                $sum: '$orderItemQuantity'
+              }
+            }
+          },
+          {
+            $sort: {
+              orderItemQuantity: -1
+            }
+          }
+        ])
+        .toArray()
+      res.json(list)
     } catch (e) {
       console.error(e)
     }
