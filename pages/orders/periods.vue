@@ -63,20 +63,35 @@
           v-card-title
             span Ordered products of period:
             v-chip(class="ma-2" small color="primary") {{ selectedPeriodStart | moment("YYYY. MM. DD.") }} - {{ selectedPeriodEnd | moment("YYYY. MM. DD.") }}
-        div
-          v-data-table(:headers="headers" :items="calculatedSumOrderItems" :search="search")
-            template(v-slot:item.image="{ item }")
-              v-img( :src="item.image" :alt="item.name" width="30px")
-            template(v-slot:item.trayQty="{ item }")
-              strong {{ item.trayQty }}
-            template(v-slot:item.trayPrice="{ item }")
-              v-chip(class="ma-2" small color="secondary") {{ item.trayPrice | currency }}
-            template(v-slot:item.orderItemPrice="{ item }")
-              v-chip(class="ma-2" small color="secondary") {{ item.orderItemPrice | currency }}
-            template(v-slot:item.payedByCompany="{ item }")
-              v-chip(class="ma-2" small color="error") {{ item.payedByCompany | currency }}
-            template(v-slot:item.subTotal="{ item }")
-              v-chip(class="ma-2" small color="primary") {{ item.subTotal | currency }}
+        div(class="row")
+          div(class="col-md-3")
+          div(class="col-md-6 row")
+            v-card(class="mx-auto mb-3 mt-3" max-width="344" min-width="200")
+              v-card-title Sum Payed by Company
+              v-card-text
+                v-icon(class="mr-3" color="error") mdi-cash
+                v-chip(class="ma-2" small color="error") {{ sumPayedByCompany | currency }}
+            v-card(class="mx-auto mb-3 mt-3" max-width="344" min-width="200")
+              v-card-title Sum Payed by Persons
+              v-card-text
+                v-icon(class="mr-3" color="primary") mdi-cash
+                v-chip(class="ma-2" small color="primary") {{ sumPayedByPerson | currency }}
+          div(class="col-md-3")
+        div(class="row")
+          div(class="col-md-12")
+            v-data-table(:headers="headers" :items="calculatedSumOrderItems" :search="search")
+              template(v-slot:item.image="{ item }")
+                v-img( :src="item.image" :alt="item.name" width="30px")
+              template(v-slot:item.trayQty="{ item }")
+                strong {{ item.trayQty }}
+              template(v-slot:item.trayPrice="{ item }")
+                v-chip(class="ma-2" small color="secondary") {{ item.trayPrice | currency }}
+              template(v-slot:item.orderItemPrice="{ item }")
+                v-chip(class="ma-2" small color="secondary") {{ item.orderItemPrice | currency }}
+              template(v-slot:item.payedByCompany="{ item }")
+                v-chip(class="ma-2" small color="error") {{ item.payedByCompany | currency }}
+              template(v-slot:item.payedByPerson="{ item }")
+                v-chip(class="ma-2" small color="primary") {{ item.payedByPerson | currency }}
 </template>
 <script>
 export default {
@@ -92,10 +107,10 @@ export default {
       { text: 'Requested Tray', value: 'trayQty' },
       { text: 'Price / Tray', value: 'trayPrice' },
       { text: 'Price / Qty', value: 'orderItemPrice' },
-      { text: 'plusQty', value: 'plusQty' },
-      { text: 'Payed by company', value: 'payedByCompany' },
-      { text: 'Ordered Qty by person', value: 'orderItemQuantity' },
-      { text: 'Payed by person', value: 'subTotal' }
+      { text: 'Plus Qty', value: 'plusQty' },
+      { text: 'Payed by Company', value: 'payedByCompany' },
+      { text: 'Ordered Qty by Persons', value: 'orderItemQuantity' },
+      { text: 'Payed by Persons', value: 'payedByPerson' }
     ],
     orderTable: ['Date', 'E-mail', 'Total', 'Status', ''],
     orderStatuses: ['RAW', 'UNDER PROCESS', 'COMPLETED'],
@@ -114,6 +129,24 @@ export default {
     selectedPeriodEnd: 0,
     actualPeriod: 0
   }),
+  computed: {
+    sumPayedByCompany() {
+      let n
+      let sumPayedByCompany = 0
+      for (n in this.calculatedSumOrderItems) {
+        sumPayedByCompany += this.calculatedSumOrderItems[n].payedByCompany
+      }
+      return sumPayedByCompany
+    },
+    sumPayedByPerson() {
+      let n
+      let sumPayedByPerson = 0
+      for (n in this.calculatedSumOrderItems) {
+        sumPayedByPerson += this.calculatedSumOrderItems[n].payedByPerson
+      }
+      return sumPayedByPerson
+    }
+  },
   mounted() {
     console.log('mounted')
     this.listPeriods()
@@ -141,12 +174,17 @@ export default {
             calculatedSumOrderItems[n].orderItemQuantity / 24
           )
         }
-        calculatedSumOrderItems[n].plusQty =
-          calculatedSumOrderItems[n].orderItemQuantity % 24
+        if (calculatedSumOrderItems[n].orderItemQuantity <= 24) {
+          calculatedSumOrderItems[n].plusQty =
+            24 - calculatedSumOrderItems[n].orderItemQuantity
+        } else {
+          calculatedSumOrderItems[n].plusQty =
+            24 - (calculatedSumOrderItems[n].orderItemQuantity % 24)
+        }
         calculatedSumOrderItems[n].payedByCompany =
           calculatedSumOrderItems[n].plusQty *
           calculatedSumOrderItems[n].orderItemPrice
-        calculatedSumOrderItems[n].subTotal =
+        calculatedSumOrderItems[n].payedByPerson =
           calculatedSumOrderItems[n].orderItemPrice *
           calculatedSumOrderItems[n].orderItemQuantity
         calculatedSumOrderItems[n].trayPrice =
