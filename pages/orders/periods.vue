@@ -3,7 +3,7 @@
     v-subheader(class="base-title")
       h1 {{pageTitle}}
     div(class="row")
-      div(class="col-md-6")
+      div(class="col-lg-6")
         div(class="col-md-12")
           v-card
             v-card-title Add new period
@@ -14,7 +14,7 @@
                 v-text-field(type="date" class="mx-3" v-model="newPeriodStart" :rules="newPeriodStartRules" required)
                 v-text-field(type="date" class="mx-3" v-model="newPeriodEnd" :rules="newPeriodEndRules" required)
                 v-btn(color="primary" class="mx-3" type="submit") Add new period
-      div(class="col-md-6")
+      div(class="col-lg-6")
         div(class="col-md-12")
           v-card
             v-card-title All periods
