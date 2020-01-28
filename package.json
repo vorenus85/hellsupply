@@ -51,6 +51,7 @@
     "pug-plain-loader": "^1.0.0",
     "sass-loader": "^8.0.0",
     "stylelint": "^10.1.0",
+    "vue-json-csv": "^1.2.10",
     "vue-multiselect": "^2.1.6"
   }
 }

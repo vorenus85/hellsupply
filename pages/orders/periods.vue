@@ -81,6 +81,8 @@
           div(class="col-md-3")
         div(class="row")
           div(class="col-md-12")
+            v-btn(color="success" class="mx-2 mb-3")
+              download-csv(:data="calculatedSumOrderItems" :name="fullListCsv" :delimiter="csvDelimiter") Export full list
             v-data-table(:headers="headers" :items="calculatedSumOrderItems" :search="search")
               template(v-slot:item.image="{ item }")
                 v-img( :src="item.image" :alt="item.name" width="30px")
@@ -96,6 +98,9 @@
                 v-chip(class="ma-2" small color="primary") {{ item.payedByPerson | currency }}
 </template>
 <script>
+import Vue from 'vue'
+import JsonCSV from 'vue-json-csv'
+Vue.component('downloadCsv', JsonCSV)
 export default {
   head: () => ({
     title: 'Order periods'
@@ -139,6 +144,23 @@ export default {
         sumPayedByCompany += this.calculatedSumOrderItems[n].payedByCompany
       }
       return sumPayedByCompany
+    },
+    fullListCsv() {
+      let start = new Date(this.selectedPeriodStart)
+      let end = new Date(this.selectedPeriodEnd)
+
+      const startYear = start.getFullYear()
+      const startMonth = start.getMonth() + 1
+      const startDate = start.getDate()
+      const endYear = end.getFullYear()
+      const endMonth = end.getMonth() + 1
+      const endDate = end.getDate()
+      start = startYear + '-' + startMonth + '-' + startDate
+      end = endYear + '-' + endMonth + '-' + endDate
+      return 'hell_supply_' + start + '_' + end + '.csv'
+    },
+    csvDelimiter() {
+      return ';'
     },
     sumPayedByPerson() {
       let n
@@ -245,6 +267,10 @@ export default {
         this.errors.push(e)
         console.error(e)
       }
+      this.showAggregatedOrderItemsByPeriod(
+        this.selectedPeriodStart,
+        this.selectedPeriodEnd
+      )
     },
     async findOrderPeriod() {
       const currentTime = new Date().getTime()
@@ -281,7 +307,6 @@ export default {
     },
     addNewPeriod(e) {
       e.preventDefault()
-      // TODO date validate!
       const periodStart = new Date(this.newPeriodStart).getTime()
       const periodEnd = new Date(this.newPeriodEnd).getTime()
       if (periodEnd <= periodStart) {
